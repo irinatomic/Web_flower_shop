@@ -1,0 +1,46 @@
+body {
+  background: linear-gradient(#554971, #8aC6d0);
+  background-attachment: fixed;
+}
+
+main.container {
+  background-color: #fff; 
+  box-shadow: 0 0 12px black;
+  border: 1px solid black;
+  margin-top: 15px;
+}
+
+.navbar {
+  background-color: #554971; 
+}
+
+.navbar-nav .nav-link {
+  color: black; 
+}
+
+.btn {
+  background-color: #554971; 
+  border: #36213E;
+}
+
+.btn-primary {
+  background-color: #554971;
+  border: #36213E;
+  margin: 2px;
+}
+
+.btn-primary:hover {
+  background-color: #36213E; 
+  border: #554971;
+}
+
+.btn-x-option {
+  background-color: transparent; 
+  border: none;
+}
+
+.opis-cell {
+  max-width: 400px; 
+  white-space: wrap; 
+  text-overflow: ellipsis; 
+}
