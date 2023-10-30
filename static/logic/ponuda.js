@@ -44,7 +44,8 @@ function populateTable(table, data) {
 
         const izmeniLink = document.createElement("button");
         izmeniLink.className = "btn btn-primary";
-        izmeniLink.href = `proizvod.html?id=${item.id}`;
+        izmeniLink.href = `./../proizvod.html`;
+        //izmeniLink.href = `proizvod.html?id=${item.id}`;
         izmeniLink.textContent = "Izmeni";
 
         akcijeCell.appendChild(promenaCeneButton);
