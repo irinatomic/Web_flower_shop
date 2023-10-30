@@ -4,7 +4,6 @@ window.addEventListener("load", async function () {
     try {
         const response = await fetch('/ponuda');
         const data = await response.json();
-        console.log(data);
 
         const ponudaTable = document.getElementById("ponuda-spisak");
         populateTable(ponudaTable, data);
