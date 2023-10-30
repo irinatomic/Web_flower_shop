@@ -42,7 +42,7 @@ function populateTable(table, data) {
             }
         };
 
-        const izmeniLink = document.createElement("button");
+        const izmeniLink = document.createElement("a");
         izmeniLink.className = "btn btn-primary";
         izmeniLink.href = `./../proizvod.html`;
         //izmeniLink.href = `proizvod.html?id=${item.id}`;
