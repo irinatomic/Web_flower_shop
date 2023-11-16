@@ -1,4 +1,3 @@
 {"naziv":"Midnight boquet","opis":"Midnight buket je predivan i elegantan buket koji kombinuje različite vrste cveća kako bi stvorio duboku, tamnu i misterioznu atmosferu, upravo kao što naziv sugerira. Evo opisa ovog čarobnog buketa: 10 astromerija","kategorija":"Buket","cena":"1200"}
 {"naziv":"I love you","opis":"Savršen poklon za voljenu osobu (12 crvenih ruža)","kategorija":"Buket","cena":"1440"}
 {"naziv":"Warm summer day","opis":"Kada želite da osunčate Vaš dom (6 karanfila, 2 astromerije i 2 ljiljana).","kategorija":"Buket","cena":"1800"}
-{"naziv":"Buket plavi","opis":"Plavo cvece","kategorija":"Buket","cena":"500"}
