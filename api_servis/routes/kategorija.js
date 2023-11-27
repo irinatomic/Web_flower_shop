@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const { sequelize, Proizvod, Kategorija } = require("../models");
 
 // Middleware for parsing application/json
 route.use(express.json());
@@ -12,7 +13,8 @@ module.exports = route;
 route.get("/", async (req, res) => {
 
     try {
-        return res.json("sve kategorije");
+        const kategorije = await Kategorija.findAll();
+        return res.json(kategorije);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -23,7 +25,8 @@ route.get("/", async (req, res) => {
 route.get("/:id", async (req, res) => {
 
     try {
-        return res.json("kategorija čiji je id=" + req.params.id);
+        const kat = await Kategorija.findByPk(req.params.id);
+        return res.json(kat);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -34,7 +37,8 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
 
     try {
-        return res.json("unos nove kategorije ciji su podaci u req.body");
+        const novi = await Kategorija.create(req.body);
+        return res.json(novi);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -45,18 +49,24 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     
     try {
-        return res.json("izmena podataka kategorije čiji je id=" + req.params.id + " a podaci su u req.body");
-
+        const kat = await Kategorija.findByPk(req.params.id);
+        kat.naziv = req.body.naziv;
+        await kat.save();
+        return res.json(kat);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });
     }
 });
 
+
+// DELETE
 route.delete("/:id", async (req, res) => {
 
     try {
-        return res.json(req.params.id);         //id obrisanog
+        const kat = await Kategorija.findByPk(req.params.id);
+        await kat.destroy();
+        return res.json(kat.id);         //id obrisanog
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });

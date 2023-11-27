@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const { sequelize, CvetUProizvodu, Cvet } = require("../models");
 
 // Middleware for parsing application/json
 route.use(express.json());
@@ -12,7 +13,8 @@ module.exports = route;
 route.get("/", async (req, res) => {
 
     try {
-        return res.json("svi cvetovi");
+        const cvetovi = await Cvet.findAll();
+        return res.json(cvetovi);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -23,7 +25,8 @@ route.get("/", async (req, res) => {
 route.get("/:id", async (req, res) => {
 
     try {
-        return res.json("cvet čiji je id=" + req.params.id);
+        const cvet = await Cvet.findByPk(req.params.id);
+        return res.json(cvet);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -34,7 +37,8 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
 
     try {
-        return res.json("unos novog cveta ciji su podaci u req.body");
+        const novi = await Cvet.create(req.body);
+        return res.json(novi);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -45,18 +49,23 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     
     try {
-        return res.json("izmena podataka cveta čiji je id=" + req.params.id + " a podaci su u req.body");
-
+        const cvet = await Cvet.findByPk(req.params.id);
+        cvet.naziv = req.body.naziv;
+        await cvet.save();
+        return res.json(cvet);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });
     }
 });
 
+// DELETE
 route.delete("/:id", async (req, res) => {
 
     try {
-        return res.json(req.params.id);         //id obrisanog
+        const cvet = await Cvet.findByPk(req.params.id);
+        await cvet.destroy();
+        return res.json(cvet.id);         //id obrisanog
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });

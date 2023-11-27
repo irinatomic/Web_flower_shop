@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const { sequelize, Kategorija, Proizvod } = require("../models");
 
 // Middleware for parsing application/json
 route.use(express.json());
@@ -8,11 +9,16 @@ route.use(express.urlencoded({ extended: true }));
 // Export Route object 
 module.exports = route;
 
+// TO-DO: POST and PUT should add flowers and their amounts
+
 // GET 
 route.get("/", async (req, res) => {
 
     try {
-        return res.json("svi proizvodi");
+        const proizvodi = await Proizvod.findAll({
+            include: [{ model: Kategorija, as: 'kategorija' }]
+        });
+        return res.json(proizvodi);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -23,7 +29,10 @@ route.get("/", async (req, res) => {
 route.get("/:id", async (req, res) => {
 
     try {
-        return res.json("proizvod čiji je id=" + req.params.id);
+        const proizvod = await Proizvod.findByPk(req.params.id, {
+            include: [{ model: Kategorija, as: 'kategorija' }]
+        });
+        return res.json(proizvod);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -34,7 +43,15 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
 
     try {
-        return res.json("unos novog proizvoda ciji su podaci u req.body");
+        const novi = {};
+        novi.naziv = req.body.naziv;
+        novi.opis = req.body.opis;
+        novi.cena = req.body.cena;
+        const kat = await Kategorija.findOne({ where: { naziv: req.body.kategorija } });
+        novi.kategorija_id = kat.id;
+        const insertovani = await Proizvod.create(novi);
+        return res.json(insertovani);
+
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal error", data: err });
@@ -45,7 +62,14 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
 
     try {
-        return res.json("izmena podataka proizvoda čiji je id=" + req.params.id + " a podaci su u req.body");
+        const proizvod = await Proizvod.findByPk(req.params.id);
+        proizvod.naziv = req.body.naziv;
+        proizvod.opis = req.body.opis;
+        proizvod.cena = req.body.cena;
+        const kat = await Kategorija.findOne({ where: { naziv: req.body.kategorija } });
+        proizvod.kategorija_id = kat.id;
+        await proizvod.save();
+        return res.json(proizvod);
 
     } catch (err) {
         console.log(err);
@@ -53,10 +77,13 @@ route.put("/:id", async (req, res) => {
     }
 });
 
+// DELETE
 route.delete("/:id", async (req, res) => {
 
     try {
-        return res.json(req.params.id);         //id obrisanog
+        const proizvod = await Proizvod.findByPk(req.params.id);
+        proizvod.destroy();
+        return res.json(proizvod.id);         //id obrisanog
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });

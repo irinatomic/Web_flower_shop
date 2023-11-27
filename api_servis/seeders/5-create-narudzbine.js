@@ -9,9 +9,7 @@ module.exports = {
         adresa: 'Kralja Milana 12/2',
         telefon: '0641234567',
         email: 'ime_prezime',
-        ime_prezime: 'ime_prezime',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        ime_prezime: 'ime_prezime'
       },
       {
         zakazano_vreme: '2023-10-06 12:00:00',
@@ -19,9 +17,7 @@ module.exports = {
         adresa: 'Knez Mihailova 6/6',
         telefon: '0641234567',
         email: 'ime_prezime',
-        ime_prezime: 'ime_prezime',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        ime_prezime: 'ime_prezime'
       },
       {
         zakazano_vreme: '2023-10-06 14:00:00',
@@ -29,9 +25,7 @@ module.exports = {
         adresa: 'Milutina Milankovića 17',
         telefon: '0641234567',
         email: 'ime_prezime',
-        ime_prezime: 'ime_prezime',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        ime_prezime: 'ime_prezime'
       },
     ], {});
   },

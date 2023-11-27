@@ -9,16 +9,22 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      cvet_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Cvet',            // matches actual Cvet table name
+          key: 'id'
+        }
+      },
+      proizvod_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Proizvod',        // matches your Proizvod table name
+          key: 'id'
+        }
+      },
       kolicina: {
         type: Sequelize.INTEGER
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },

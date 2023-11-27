@@ -4,14 +4,10 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Kategorija', [
       {
-        naziv: 'Buket',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        naziv: 'Buket'
       },
       {
-        naziv: 'Aranžman',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        naziv: 'Aranžman'
       },
     ], {});
   },

@@ -12,14 +12,23 @@ module.exports = {
       kolicina: {
         type: Sequelize.INTEGER
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      jedinicna_cena: {
+        type: Sequelize.INTEGER,
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
+      proizvod_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Proizvod',        // matches Proizvod table name
+          key: 'id'
+        }
+      },
+      narudzbina_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Narudzbina',        // matches Narudzbina table name
+          key: 'id'
+        }
+      },
     });
   },
   async down(queryInterface, Sequelize) {

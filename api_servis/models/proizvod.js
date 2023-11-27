@@ -4,10 +4,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 
   class Proizvod extends Model {
-    static associate({Kategorija, Cvet, StavkaNarudzbine}) {
-      this.belongsTo(Kategorija, {foreignKey: "kategorija_id", as: "kategorija"});
-      this.hasMany(StavkaNarudzbine, {foreignKey: "jelo_id", as: "stavke"});
-      this.belongsToMany(Cvet, {through: "CvetUProizvodu", foreignKey: "proizvod_id", as: "cvetovi"});
+    static associate({ Kategorija, StavkaNarudzbine, Cvet }) {
+      this.belongsTo(Kategorija, { foreignKey: 'kategorija_id', as: 'kategorija' });
+      this.hasMany(StavkaNarudzbine, { foreignKey: 'proizvod_id', as: 'stavke' });
+      this.belongsToMany(Cvet, { through: 'CvetUProizvodu', foreignKey: 'proizvod_id', as: 'cvetovi' });
     }
   }
 
@@ -33,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Proizvod',
-    tableName: 'Proizvod'
+    tableName: 'Proizvod',
+    timestamps: false
   });
 
   return Proizvod;
