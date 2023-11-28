@@ -89,3 +89,17 @@ route.delete("/:id", async (req, res) => {
         res.status(500).json({ error: "Greska", data: err });
     }
 });
+
+route.put("/promeni-cenu/:id", async (req, res) => {
+
+    try {
+        const proizvod = await Proizvod.findByPk(req.params.id);
+        proizvod.cena = req.body.cena;
+        await proizvod.save();
+        return res.json(proizvod);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Greska", data: err });
+    }
+});

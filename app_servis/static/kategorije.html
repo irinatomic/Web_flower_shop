@@ -49,22 +49,7 @@
         <th>Izmena</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td>Buket</td>
-        <td>
-          <button class="btn btn-primary" onClick="openChangeCategoryModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td id = "aLbl">Aranžman</td>
-        <td>
-          <button class="btn btn-primary" onClick="openChangeCategoryModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      </tbody>
+    <tbody> <tr></tr> </tbody>
   </table>
 
   <!-- Modal code for adding a new category -->
@@ -87,7 +72,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewCategoryModal()">Zatvori</button>
-          <button type="button" class="btn btn-primary" onclick="addNewCategory()">Dodaj</button>
+          <button type="button" class="btn btn-primary" onclick="addCategory(document.getElementById('newCategoryInput').value)">Dodaj</button>
         </div>
       </div>
     </div>

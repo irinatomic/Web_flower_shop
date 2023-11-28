@@ -1,67 +1,129 @@
-// opens a modal for adding a new flower
-function addFlower() {
+// Calls the function when the page is loaded
+window.addEventListener("load", async function () {
 
-  var flowerNameInput = document.getElementById("newFLowerInput");
-  var flowerName = flowerNameInput.value.trim();
+    try {
+        const response = await fetch('http://localhost:9000/cvet');
+        const data = await response.json();
 
-  // Valid input
-  if(flowerName.length > 2 && /^[A-Za-z\s]+$/.test(flowerName)){
-    var table = document.getElementById("cvetovi");
-    var newRow = table.insertRow(table.rows.length);
-    var cell1 = newRow.insertCell(0);
-    var cell2 = newRow.insertCell(1);
-    cell1.innerHTML = flowerName;
-    cell2.innerHTML = '<button class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>&nbsp;' +
-                      '<button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>';
+        populateTable(data);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
 
-    // Clear the input field and close the modal
-    flowerNameInput.value = ''; 
-    $('#addFlowerModal').modal('hide'); 
-  } else {
-    alert("Naziv cveta mora sadržavati barem 3 slova i smeti sadržavati samo slova i razmake.");
-  }
+function populateTable(data) {
+    data.forEach(item => { addRowToTable(item) });
+}
+
+function addRowToTable(item) {
+
+    const table = document.getElementById("cvetovi");
+    const row = table.insertRow();
+    const nazivCell = row.insertCell(0);
+    const izmenaCell = row.insertCell(1);
+
+    row.id = item.id;
+    nazivCell.textContent = item.naziv;
+
+    // IZMENI BUTTON
+    const izmeniButton = document.createElement("button");
+    izmeniButton.className = "btn btn-primary";
+    izmeniButton.textContent = "Izmeni";
+    izmeniButton.addEventListener("click", function () { openUpdateFlowerModal(row) });
+
+    // IZBRISI BUTTON
+    const izbrisiButton = document.createElement("button");
+    izbrisiButton.className = "btn btn-danger";
+    izbrisiButton.textContent = "Izbrisi";
+    izbrisiButton.addEventListener("click", function () { deleteFlower(row) });
+
+    izmenaCell.appendChild(izmeniButton);
+    izmenaCell.appendChild(izbrisiButton);
+}
+
+// Add new category to DB and table
+async function addFlower(naziv) {
+
+    // Validate input
+    if (!(naziv.length > 2 && /^[A-Za-z\s]+$/.test(naziv))) {
+        alert("Naziv cveta mora sadržavati barem 3 slova i smeti sadržavati samo slova i razmake.");
+        return;
+    }
+
+    // Add to DB
+    const url = `http://localhost:9000/cvet`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ naziv: naziv })
+    });
+
+    // Add to table
+    const data = await response.json();
+    addRowToTable(data);
+}
+
+async function openUpdateFlowerModal(row) {
+
+    const flowerNameInput = document.getElementById("changeFlowerInput");
+    const updateFlowerButton = document.getElementById("updateFlowerButton");
+
+    // Get the category name from the corresponding table cell
+    const flowerName = row.cells[0].innerText;
+
+    // Set the input value to the current category name
+    flowerNameInput.value = `${flowerName}`
+    flowerNameInput.focus();
+
+    // Show the modal
+    $('#changeFlowerModal').modal('show');
+
+    // Add a click event to update the category name
+    updateFlowerButton.addEventListener("click", function () {
+        updateFlower(row, flowerNameInput.value);
+        closeNewFlowerModal();
+    });
+}
+
+// Update category name in DB and table
+async function updateFlower(row, noviNaziv) {
+
+    // Validate input
+    if (!(noviNaziv.length > 2 && /^[A-Za-z\s]+$/.test(noviNaziv))) {
+        alert("Naziv cveta mora sadržavati barem 3 slova i smeti sadržavati samo slova i razmake.");
+        return;
+    }
+
+    // Update in DB
+    const url = `http://localhost:9000/cvet/${row.id}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ naziv: noviNaziv })
+    });
+
+    // Update in table
+    const responseData = await response.json();
+    row.cells[0].textContent = responseData.naziv;
+}
+
+// Delete category from DB and table
+async function deleteFlower(row) {
+
+    if(!confirm("Potvrdite brisanje")) return;
+
+    // Delete from DB
+    const url = `http://localhost:9000/cvet/${row.id}`;
+    const response = await fetch(url, { method: 'DELETE' });
+
+    if(!response.ok) throw new Error(`Greska prilikom brisanja cveta: ${response.status}`);
+
+    // Delete from table
+    row.remove();
 }
 
 function closeNewFlowerModal() {
-  var categoryNameInput = document.getElementById("newFLowerInput");
-  categoryNameInput.value = ''; 
-  $('#addFlowerModal').modal('hide');
-}
-
-function openChangeFlowerModal(button) {
-
-  var modal = document.getElementById("changeFlowerModal");
-  var categoryNameInput = document.getElementById("changeFlowerInput");
-  var updateCategoryButton = document.getElementById("updateFlowerButton");
-
-  // Get the category name from the corresponding table cell
-  var row = button.parentNode.parentNode;
-  var categoryName = row.cells[0].innerText;
-
-  // Set the input value to the current category name
-  categoryNameInput.value = `${categoryName}`
-
-  // Display the modal
-  $('#changeFlowerModal').modal('show');
-
-  // Add a click event to update the category name
-  updateCategoryButton.addEventListener("click", function() {
-    var newCategoryName = categoryNameInput.value;
-    if (newCategoryName.length > 2) {
-      row.cells[0].innerText = newCategoryName;
-      $('#changeFlowerModal').modal('hide');
-    } else {
-      alert("Naziv cveta mora sadržavati barem 3 slova.");
-    }
-  });
-
-}
-
-// delete a row from the table
-function deleteRow(button) {
-
-  // get the row and the table
-  var row = button.parentNode.parentNode; 
-  var table = document.getElementById("cvetovi"); 
-  table.deleteRow(row.rowIndex); 
+    var categoryNameInput = document.getElementById("newFLowerInput");
+    categoryNameInput.value = '';
+    $('#addFlowerModal').modal('hide');
 }

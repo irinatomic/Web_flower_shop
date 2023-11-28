@@ -44,3 +44,13 @@ main.container {
   white-space: wrap; 
   text-overflow: ellipsis; 
 }
+
+.succes {
+  border: 1px solid green;
+  margin-top: 15px;
+}
+
+.error {
+  border: 1px solid red;
+  margin-top: 15px;
+}

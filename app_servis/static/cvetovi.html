@@ -49,85 +49,7 @@
         <th>Izmena</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td>Crvene ruže</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Roze ruže</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Žute ruže</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Orhideje</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button
-        ></td>
-      </tr>
-      <tr>
-        <td>Karanfili</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Ljiljani</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Astromerija</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Narcisi</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Lale</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Frezije</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Zumbuli</td>
-        <td>
-          <button type="button" class="btn btn-primary" onclick="openChangeFlowerModal(this)">Izmeni</button>
-          <button class="btn btn-primary" onclick="deleteRow(this)">Izbrisi</button>
-        </td>
-      </tr>
-    </tbody>
+    <tbody> <tr></tr> </tbody>
   </table>
 
   <!-- Modal code for adding a new flower -->
@@ -150,7 +72,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewFlowerModal()">Zatvori</button>
-          <button type="button" class="btn btn-primary" onclick="addFlower()">Dodaj</button>
+          <button type="button" class="btn btn-primary" onclick="addFlower(document.getElementById('newFLowerInput').value)">Dodaj</button>
         </div>
       </div>
     </div>
