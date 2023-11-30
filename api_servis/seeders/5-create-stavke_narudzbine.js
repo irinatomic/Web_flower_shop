@@ -49,11 +49,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    try {
-      await StavkaNarudzbine.destroy({ where: {} });
-    } catch (error) {
-      console.error("Error deleting data:", error);
-      throw error;
-    }
+    return queryInterface.bulkDelete('StavkaNarudzbine', null, {});
   }
 };

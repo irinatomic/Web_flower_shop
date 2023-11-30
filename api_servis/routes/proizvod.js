@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const { sequelize, Kategorija, Proizvod } = require("../models");
+const { sequelize, Kategorija, Proizvod, Cvet, CvetUProizvodu } = require("../models");
 
 // Middleware for parsing application/json
 route.use(express.json());
@@ -8,8 +8,6 @@ route.use(express.urlencoded({ extended: true }));
 
 // Export Route object 
 module.exports = route;
-
-// TO-DO: POST and PUT should add flowers and their amounts
 
 // GET 
 route.get("/", async (req, res) => {
@@ -30,8 +28,13 @@ route.get("/:id", async (req, res) => {
 
     try {
         const proizvod = await Proizvod.findByPk(req.params.id, {
-            include: [{ model: Kategorija, as: 'kategorija' }]
-        });
+            include: [
+                {
+                    model: CvetUProizvodu,
+                    as: 'cvetovi',
+                }
+            ]
+        })
         return res.json(proizvod);
     } catch (err) {
         console.log(err);
@@ -42,15 +45,35 @@ route.get("/:id", async (req, res) => {
 // POST
 route.post("/", async (req, res) => {
 
+    const proizvodData = req.body;
+
     try {
-        const novi = {};
-        novi.naziv = req.body.naziv;
-        novi.opis = req.body.opis;
-        novi.cena = req.body.cena;
-        const kat = await Kategorija.findOne({ where: { naziv: req.body.kategorija } });
-        novi.kategorija_id = kat.id;
-        const insertovani = await Proizvod.create(novi);
-        return res.json(insertovani);
+
+        const proizvod = await Proizvod.findOrCreate({
+            where: { naziv: proizvodData.naziv },       // naziv je unique
+            defaults: {
+                opis: proizvodData.opis,
+                cena: proizvodData.cena,
+                kategorija_id: proizvodData.kategorija
+            }
+        });
+
+        // Add flowers to the product
+        for (const [cvetId, kolicina] of Object.entries(proizvodData.sadrzaj)) {
+            const cvet = await Cvet.findOrCreate({
+                where: { id: cvetId },
+                defaults: { naziv: `Cvet ${cvetId}` }
+            });
+
+            // Add to CvetUProizvodu
+            await CvetUProizvodu.create({
+                cvet_id: cvet[0].id,
+                proizvod_id: proizvod[0].id,
+                kolicina: kolicina
+            });
+        }
+
+        return res.json(proizvod);
 
     } catch (err) {
         console.log(err);
@@ -58,37 +81,73 @@ route.post("/", async (req, res) => {
     }
 });
 
-// PUT
 route.put("/:id", async (req, res) => {
+    const proizvodId = req.params.id;
+    const proizvodData = req.body;
 
     try {
-        const proizvod = await Proizvod.findByPk(req.params.id);
-        proizvod.naziv = req.body.naziv;
-        proizvod.opis = req.body.opis;
-        proizvod.cena = req.body.cena;
-        const kat = await Kategorija.findOne({ where: { naziv: req.body.kategorija } });
-        proizvod.kategorija_id = kat.id;
-        await proizvod.save();
-        return res.json(proizvod);
+        let proizvod = await Proizvod.findByPk(proizvodId);
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Greska", data: err });
+        // Update Proizvod 
+        await proizvod.update({
+            naziv: proizvodData.naziv,
+            opis: proizvodData.opis,
+            cena: proizvodData.cena,
+            kategorija_id: proizvodData.kategorija
+        });
+
+        // Fetch existing CvetUProizvodu entries for the Proizvod
+        const existingEntries = await CvetUProizvodu.findAll({
+            where: { proizvod_id: proizvodId }
+        });
+
+        const updatedCvetIds = Object.keys(proizvodData.sadrzaj);
+
+        // Delete entries that are not present in the updated payload
+        await Promise.all(existingEntries.map(async (entry) => {
+            if (!updatedCvetIds.includes(entry.cvet_id.toString())) {
+                await entry.destroy();
+            }
+        }));
+
+        // Update or create in table CvetUProizvodu
+        for (const [cvetId, kolicina] of Object.entries(proizvodData.sadrzaj)) {
+            const [cvet, created] = await Cvet.findOrCreate({
+                where: { id: cvetId },
+                defaults: { naziv: `Cvet ${cvetId}` }
+            });
+
+            await CvetUProizvodu.upsert({
+                cvet_id: cvet.id,
+                proizvod_id: proizvodId,
+                kolicina: kolicina
+            });
+        }
+
+        return res.json(proizvod);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Greska", data: error });
     }
 });
+
 
 // DELETE
 route.delete("/:id", async (req, res) => {
 
     try {
         const proizvod = await Proizvod.findByPk(req.params.id);
-        proizvod.destroy();
-        return res.json(proizvod.id);         //id obrisanog
+        await CvetUProizvodu.destroy({
+            where: { proizvod_id: req.params.id }
+        });
+        await proizvod.destroy();
+        return res.status(200).json(proizvod.id);       // id obrisanog
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });
     }
 });
+
 
 route.put("/promeni-cenu/:id", async (req, res) => {
 

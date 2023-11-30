@@ -12,14 +12,14 @@ module.exports = {
       cvet_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Cvet',            // matches actual Cvet table name
+          model: 'Cvet',            // matches Cvet table name
           key: 'id'
         }
       },
       proizvod_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Proizvod',        // matches your Proizvod table name
+          model: 'Proizvod',        // matches Proizvod table name
           key: 'id'
         }
       },
@@ -27,7 +27,15 @@ module.exports = {
         type: Sequelize.INTEGER
       }
     });
+
+    await queryInterface.addConstraint('CvetUProizvodu', {    // for upsert
+      type: 'unique',
+      fields: ['cvet_id', 'proizvod_id'],
+      name: 'unique_cvet_proizvod' 
+    });
+
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('CvetUProizvodu');
   }

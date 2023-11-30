@@ -51,8 +51,7 @@
       <div class="col-6">
         <label> Kategorija: </label>
         <select class="form-select" name="kategorija" id="kategorija">
-          <option value="1"> Buket </option>
-          <option value="2"> Aranžman </option>
+          <!-- Options will be dynamically populated here -->
         </select>
       </div>
       <div class="col-6">
@@ -66,18 +65,7 @@
         <label for="naziv"> Cvetovi: </label>
         <div class="input-group mb-3">
           <select class="form-select" id="spisak-cvetova">
-            <option></option>
-            <option value="1"> Crvene ruže </option>
-            <option value="2"> Roze ruže </option>
-            <option value="5"> Žute ruže </option>
-            <option value="3"> Orhideje </option>
-            <option value="4"> Karanfili </option>
-            <option value="5"> Ljiljani </option>
-            <option value="6"> Astromerija </option>
-            <option value="7"> Narcisi </option>
-            <option value="8"> Lale </option>
-            <option value="9"> Frezije </option>
-            <option value="10"> Zumbuli </option>
+            <!-- Options will be dynamically populated here -->
           </select>
           <button class="btn btn-success" type="button" id="dodaj-cvet"> + </button>
         </div>
@@ -88,13 +76,11 @@
       </div>
     </div>
     
-
     <div id="izabrano"></div>
 
     <div class="mb-3 mt-3">
-      <button class="btn btn-primary"> Sačuvaj </button>
+      <button id="sacuvaj-btn" class="btn btn-primary"> Sačuvaj </button>
       <a href="proizvodi.html" class="btn btn-primary"> Nazad </a>
-      <a href="#" class="btn btn-danger">Obriši</a>
     </div>
 
     <input type="hidden" name="cvetovi" id="cvetovi-input">

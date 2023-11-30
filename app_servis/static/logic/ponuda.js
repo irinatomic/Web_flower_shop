@@ -74,7 +74,7 @@ function populateTable(table, data) {
             }
 
             row.remove();
-            window.location.href('ponuda.html');
+            window.location.href = 'ponuda.html';
         }
 
         const izmeniLink = document.createElement("a");

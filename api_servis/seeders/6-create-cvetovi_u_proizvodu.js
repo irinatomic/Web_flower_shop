@@ -1,4 +1,6 @@
-const { Proizvod, CvetUProizvodu } = require('../models');
+'use strict';
+
+const { Proizvod } = require('../models');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -45,11 +47,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    try {
-      await CvetUProizvodu.destroy({ where: {} });
-    } catch (error) {
-      console.error("Error deleting data:", error);
-      throw error;
-    }
+    return queryInterface.bulkDelete('CvetUProizvodu', null, {});
   }
 };

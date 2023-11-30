@@ -51,8 +51,7 @@
       <div class="col-6">
         <label> Kategorija: </label>
         <select class="form-select" name="kategorija" id="kategorija">
-          <option value="Buket"> Buket </option>
-          <option value="Aranžman"> Aranžman </option>
+          <!-- Options will be dynamically populated here -->
         </select>
       </div>
       <div class="col-6">
@@ -60,8 +59,27 @@
         <input type="number" min="0" step="1" required id="cena" name="cena" class="form-control">
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label for="naziv"> Cvetovi: </label>
+        <div class="input-group mb-3">
+          <select class="form-select" id="spisak-cvetova">
+            <!-- Options will be dynamically populated here -->
+          </select>
+          <button class="btn btn-success" type="button" id="dodaj-cvet-btn"> + </button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label>Broj komada:</label>
+        <input type="number" min="0" step="1" name="broj-komada" class="form-control" id="broj-komada-input">
+      </div>
+    </div>
+    
+    <div id="izabrano"></div>
+
     <div class="mb-3 mt-3">
-      <button class="btn btn-primary"> Unesi </button>
+      <button id="unesi-btn" class="btn btn-primary"> Unesi </button>
       <a href="proizvodi.html" class="btn btn-primary">Nazad</a>
     </div>
   </form>

@@ -92,12 +92,28 @@ route.put("/:id", async (req, res) => {
     }
 });
 
+// DELETE
 route.delete("/:id", async (req, res) => {
 
     try {
         const nar = await Narudzbina.findByPk(req.params.id);
         await nar.destroy();
         return res.json(nar.id);         //id obrisanog
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Greska", data: err });
+    }
+});
+
+// PUT change status
+route.put("/promeni-status/:id", async (req, res) => {
+
+    try {
+        const nar = await Narudzbina.findByPk(req.params.id);
+        nar.status_narudzbine = req.body.status_narudzbine;
+        await nar.save();
+        return res.json(nar);
+
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });

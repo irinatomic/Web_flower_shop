@@ -22,10 +22,4 @@ app.use("/kategorija", kategorijaRoutes);
 app.use("/proizvod", proizvodRoutes);
 app.use("/narudzbina", narudzbinaRoutes);
 
-// establish connection to the database
 app.listen(9000)
-// app.listen({ port:8000 }, async () => {
-// 	console.log("Started server on localhost:8000");
-// 	await sequelize.sync({force:true});
-// 	console.log("DB synced");
-// });
