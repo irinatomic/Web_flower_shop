@@ -55,16 +55,29 @@ route.get("/:id", async (req, res) => {
 // POST
 route.post("/", async (req, res) => {
 
+    const narData = req.body;
+
     try {
-        const nova = {};
-        nova.zakazano_vreme = req.body.zakazano_vreme;
-        nova.status_narudzbine = 'Nova';
-        nova.adresa = req.body.adresa;
-        nova.telefon = req.body.telefon;
-        nova.email = req.body.email;
-        nova.ime_prezime = req.body.ime_prezime;
-        const insertovana = await Narudzbina.create(nova);
-        return res.json(insertovana);
+
+        const nar = await Narudzbina.create({
+            zakazano_vreme: narData.zakazano_vreme,
+            status_narudzbine: 'Nova',
+            adresa: narData.adresa,
+            telefon: narData.telefon,
+            email: narData.email,
+            ime_prezime: narData.ime_prezime
+        });
+
+        // Add products to the order (StavkaNarudzbine
+        for (const [proizvodId, kolicina] of Object.entries(narData.sadrzaj)) {
+            const stavka = await StavkaNarudzbine.create({
+                narudzbina_id: nar.id,
+                proizvod_id: proizvodId,
+                kolicina: kolicina
+            });
+        }
+
+        return res.json(nar);
 
     } catch (err) {
         console.log(err);
@@ -75,17 +88,52 @@ route.post("/", async (req, res) => {
 // PUT
 route.put("/:id", async (req, res) => {
     
+    const narId = req.params.id;
+    const narData = req.body;
+    
     try {
-        const nar = await Narudzbina.findByPk(req.params.id);
-        nar.zakazano_vreme = req.body.zakazano_vreme;
-        nar.status_narudzbine = req.body.status_narudzbine;
-        nar.adresa = req.body.adresa;
-        nar.telefon = req.body.telefon;
-        nar.email = req.body.email;
-        nar.ime_prezime = req.body.ime_prezime;
-        await nar.save();
-        return res.json(nar);
 
+        let nar = await Narudzbina.findByPk(narId);
+
+        // Update Narudzbina
+        await nar.update({
+            zakazano_vreme: narData.zakazano_vreme,
+            status_narudzbine: narData.status_narudzbine,
+            adresa: narData.adresa,
+            telefon: narData.telefon,
+            email: narData.email,
+            ime_prezime: narData.ime_prezime
+        });
+
+        // Fetch existing StavkaNarudzbine entries for the Narudzbina
+        const existingEntries = await StavkaNarudzbine.findAll({
+            where: { narudzbina_id: narId }
+        });
+
+        const updatedProizvodIds = Object.keys(narData.sadrzaj);
+
+        // Delete StavkaNarudzbine entries that are not in the updated list
+        await Promise.all(existingEntries.map(async (entry) => {
+            if (!updatedProizvodIds.includes(entry.proizvod_id.toString())) {
+                await entry.destroy();
+            }
+        }));
+
+        // Update or create in table StavkaNarudzbine
+        for (const [proizvodId, kolicina] of Object.entries(narData.sadrzaj)) {
+            const [proizvod, created] = await Proizvod.findOrCreate({
+                where: { id: proizvodId },
+                defaults: { naziv: `Proizvod ${proizvodId}` }
+            });
+
+            await StavkaNarudzbine.upsert({
+                narudzbina_id: nar.id,
+                proizvod_id: proizvod.id,
+                kolicina: kolicina
+            });
+        }
+        
+        return res.json(nar);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Greska", data: err });
@@ -97,6 +145,9 @@ route.delete("/:id", async (req, res) => {
 
     try {
         const nar = await Narudzbina.findByPk(req.params.id);
+        await StavkaNarudzbine.destroy({
+            where: { narudzbina_id: nar.id }
+        });
         await nar.destroy();
         return res.json(nar.id);         //id obrisanog
     } catch (err) {

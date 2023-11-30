@@ -30,6 +30,13 @@ module.exports = {
         }
       },
     });
+
+    await queryInterface.addConstraint('StavkaNarudzbine', {    // for upsert
+      type: 'unique',
+      fields: ['proizvod_id', 'narudzbina_id'],
+      name: 'unique_proizvod_narudzbina' 
+    });
+
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('StavkaNarudzbine');
