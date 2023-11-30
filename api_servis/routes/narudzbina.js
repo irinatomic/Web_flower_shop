@@ -9,8 +9,6 @@ route.use(express.urlencoded({ extended: true }));
 // Export Route object 
 module.exports = route;
 
-// TO-DO: POST and PUT should add proizvodi and their amounts
-
 // GET 
 route.get("/", async (req, res) => {
 
@@ -68,12 +66,16 @@ route.post("/", async (req, res) => {
             ime_prezime: narData.ime_prezime
         });
 
+        // Fetch existing Proizvod entries
+        const proizvodi = await Proizvod.findAll();
+
         // Add products to the order (StavkaNarudzbine
         for (const [proizvodId, kolicina] of Object.entries(narData.sadrzaj)) {
             const stavka = await StavkaNarudzbine.create({
                 narudzbina_id: nar.id,
                 proizvod_id: proizvodId,
-                kolicina: kolicina
+                kolicina: kolicina,
+                jedinicna_cena: proizvodi.find(p => p.id == proizvodId).cena * kolicina
             });
         }
 
@@ -119,6 +121,9 @@ route.put("/:id", async (req, res) => {
             }
         }));
 
+        // Fetch existing Proizvod entries
+        const proizvodi = await Proizvod.findAll();
+
         // Update or create in table StavkaNarudzbine
         for (const [proizvodId, kolicina] of Object.entries(narData.sadrzaj)) {
             const [proizvod, created] = await Proizvod.findOrCreate({
@@ -129,7 +134,8 @@ route.put("/:id", async (req, res) => {
             await StavkaNarudzbine.upsert({
                 narudzbina_id: nar.id,
                 proizvod_id: proizvod.id,
-                kolicina: kolicina
+                kolicina: kolicina,
+                jedinicna_cena: proizvodi.find(p => p.id == proizvod.id).cena * kolicina
             });
         }
         

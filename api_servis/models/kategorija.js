@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 
   class Kategorija extends Model {
     static associate({ Proizvod }) {
-      this.hasMany(Proizvod, { foreignKey: 'kategorija_id' });
+      this.hasMany(Proizvod, { foreignKey: 'kategorija_id', onDelete: 'RESTRICT' });
     }
   }
 
