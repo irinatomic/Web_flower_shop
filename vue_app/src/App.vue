@@ -1,14 +1,31 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+  <div class="app">
+    <Header :title="headerTitle" />
   </div>
 </template>
 
+<script>
+import Header from './components/Header.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Header
+  },
+  data() {
+    return {
+      headerTitle: 'Cvecara "Bozur"',
+      allProducts: [],
+      currentProduct: 0,
+    }
+  }
+}
+</script>
+
 <style>
+/* imports */
+@import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

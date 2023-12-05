@@ -6,3 +6,6 @@ node_modules/
 
 # Ignore .env files
 .env
+
+# Ignore test vue app
+test/
