@@ -1,14 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import ProductsView from '../views/ProductsView.vue'
 
 Vue.use(VueRouter)
 
-// No routes defined as we're not using routing for multiple views/components
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: ProductsView
+  },
+  {
+    path: '/create-order',
+    name: 'create-order',
+    component: () => import(/* webpackChunkName: "about" */ '../views/OrderView.vue')
+  }
+]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  // No routes to define
+  routes
 })
 
 export default router

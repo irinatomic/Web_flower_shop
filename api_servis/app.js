@@ -3,7 +3,7 @@ const cors = require("cors")
 const { sequelize, Proizvod, Kategorija, CvetUProizvodu, Cvet, StavkaNarudzbine, Narudzbina } = require("./models");
 
 const app = express();
-const corsOptions = { origin: ['http://localhost:8000', 'http://127.0.0.1:8000'] };
+const corsOptions = { origin: ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8080'] };
 app.use(cors(corsOptions));
   
 
