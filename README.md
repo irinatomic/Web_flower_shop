@@ -15,7 +15,7 @@ node app
 ```
 
 ### API endpoints
-API endpoints are defines in the: <br>
+API endpoints are defined in the: <br>
 | Directory  | Documentation                                                |
 |------------|--------------------------------------------------------------|
 | Cvet       | [Cvet API Endpoints](docs/Cvet_API_Endpoints.md)             |

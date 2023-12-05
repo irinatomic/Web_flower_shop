@@ -27,7 +27,6 @@ window.addEventListener("load", async function () {
     try {
         const response = await fetch(`http://localhost:9000/proizvod/${id}`);
         const data = await response.json();
-
         fillOutData(data);
     } catch (error) {
         console.error('Error:', error);
@@ -111,7 +110,7 @@ function fillOutData(responseData) {
 
     // Kategorija
     for(const option of kategorijaSelect.children) {
-        if (option.value === responseData.kategorija_id) {
+        if (option.value == responseData.kategorija_id) {
             option.selected = true;
             break;
         }

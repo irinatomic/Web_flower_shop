@@ -1,5 +1,5 @@
 ## API Endpoints for Kategorija Table
-Lister are the API endpoints used to interact with the Kategorija table in the database.
+Listed are the API endpoints used to interact with the Kategorija table in the database.
 
 | Method      | Address                               |
 |-------------|---------------------------------------|

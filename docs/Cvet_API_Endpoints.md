@@ -1,5 +1,5 @@
 ## API Endpoints for Cvet Table
-Lister are the API endpoints used to interact with the Cvet table in the database.
+Listed are the API endpoints used to interact with the Cvet table in the database.
 
 | Method      | Address                           |
 |-------------|-----------------------------------|

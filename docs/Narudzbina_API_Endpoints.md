@@ -1,5 +1,5 @@
 ## API Endpoints for Narudzbina Table
-Lister are the API endpoints used to interact with the Narudzbina table in the database.
+Listed are the API endpoints used to interact with the Narudzbina table in the database.
 
 | Method      | Address                                           |
 |-------------|---------------------------------------------------|
