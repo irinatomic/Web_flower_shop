@@ -37,9 +37,17 @@ Returns:
       "id": 1,
       "kolicina": 10,
       "cvet_id": 7,
-      "proizvod_id": 1
+      "proizvod_id": 1,
+      "Cvet": {
+        "id": 7,
+        "naziv": "Astromerija"
+      }
     }
-  ]
+  ],
+  "kategorija": {
+    "id": 1,
+    "naziv": "Buket"
+  }
 }
 ```
 
