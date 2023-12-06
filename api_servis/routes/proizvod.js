@@ -32,6 +32,11 @@ route.get("/:id", async (req, res) => {
                 {
                     model: CvetUProizvodu,
                     as: 'cvetovi',
+                    include: [{ model: Cvet }]
+                },
+                {
+                    model: Kategorija,
+                    as: 'kategorija'
                 }
             ]
         })

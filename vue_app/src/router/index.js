@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ProductsView from '../views/ProductsView.vue'
+import DetailsView from '../views/DetailsView.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,12 @@ const routes = [
     path: '/create-order',
     name: 'create-order',
     component: () => import(/* webpackChunkName: "about" */ '../views/OrderView.vue')
+  },
+  {
+    path: '/product/:id',
+    name: 'product-details',
+    component: DetailsView,
+    props: true
   }
 ]
 

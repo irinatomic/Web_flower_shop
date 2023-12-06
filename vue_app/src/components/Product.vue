@@ -7,14 +7,18 @@
             <p class="category">Kategorija: {{ product.kategorija.naziv }}</p>
             <p class="price">Cena: {{ product.cena }} RSD</p>
         </div>
+        <router-link :to="{ name: 'product-details', params: { id: product.id, productIds: productIds } }">
+            <button> Detalji </button>
+        </router-link>
     </div>
-</template>
+</template>D
   
 <script>
 export default {
     name: 'Product',
     props: {
-        product: Object
+        product: Object,
+        productIds: []
     }
 };
 </script>
@@ -37,10 +41,13 @@ export default {
 
 .description {
     font-style: italic;
-    overflow: hidden; /* Hide overflowing content */
+    overflow: hidden;
+    /* Hide overflowing content */
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3; /* Limit number of lines */
-    line-height: 1.4; /* Line height for multiline truncation */
+    -webkit-line-clamp: 3;
+    /* Limit number of lines */
+    line-height: 1.4;
+    /* Line height for multiline truncation */
 }</style>
   

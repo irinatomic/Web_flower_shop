@@ -1,8 +1,5 @@
 <template>
-  <div class="products">
-    <button @click="prev()"> Prethodno </button>
-    <button @click="next()"> Sledece </button>
-
+  <div class="products-view">
     <!-- Include ProductList component -->
     <ProductList/>
   </div>

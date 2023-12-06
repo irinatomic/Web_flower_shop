@@ -1,7 +1,7 @@
 <template>
     <div class="product-list">
         <!-- Map the fetched products to Product components -->
-        <Product v-for="product in products" :key="product.id" :product="product" />
+        <Product v-for="product in products" :key="product.id" :product="product" :productIds="productIds" />
     </div>
 </template>
   
@@ -15,13 +15,15 @@ export default {
     },
     data() {
         return {
-            products: []
+            products: [],
+            productIds: []
         }
     },
     async mounted() {
         try {
             const res = await fetch('http://localhost:9000/proizvod');
             this.products = await res.json();
+            this.productIds = this.products.map(product => product.id);
         } catch (error) {
             console.error('Error fetching products:', error);
         }

@@ -1,5 +1,5 @@
 <template>
-  <div class="create-order">
+  <div class="order-view">
 
   </div>
 </template>
