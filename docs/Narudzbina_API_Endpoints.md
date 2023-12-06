@@ -1,14 +1,14 @@
 ## API Endpoints for Narudzbina Table
 Listed are the API endpoints used to interact with the Narudzbina table in the database.
 
-| Method      | Address                                           |
-|-------------|---------------------------------------------------|
-| GET all     | http://localhost:9000/proizvod                    |
-| GET by id   | http://localhost:9000/proizvod/:id                |
-| POST        | http://localhost:9000/proizvod                    |
-| PUT         | http://localhost:9000/proizvod/:id                |
-| PUT         | http://localhost:9000/proizvod/promeni-status/:id |
-| DELETE      | http://localhost:9000/proizvod/:id                |
+| Method      | Address                                             |
+|-------------|-----------------------------------------------------|
+| GET all     | http://localhost:9000/narudzbina                    |
+| GET by id   | http://localhost:9000/narudzbina/:id                |
+| POST        | http://localhost:9000/narudzbina                    |
+| PUT         | http://localhost:9000/narudzbina/:id                |
+| PUT         | http://localhost:9000/narudzbina/promeni-status/:id |
+| DELETE      | http://localhost:9000/narudzbina/:id                |
 
 ### GET all
 

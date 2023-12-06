@@ -3,11 +3,11 @@ Listed are the API endpoints used to interact with the Kategorija table in the d
 
 | Method      | Address                               |
 |-------------|---------------------------------------|
-| GET all     | http://localhost:9000/proizvod        |
-| GET by id   | http://localhost:9000/proizvod/:id    |
-| POST        | http://localhost:9000/proizvod        |
-| PUT         | http://localhost:9000/proizvod/:id    |
-| DELETE      | http://localhost:9000/proizvod/:id    |
+| GET all     | http://localhost:9000/kategorija        |
+| GET by id   | http://localhost:9000/kategorija/:id    |
+| POST        | http://localhost:9000/kategorija        |
+| PUT         | http://localhost:9000/kategorija/:id    |
+| DELETE      | http://localhost:9000/kategorija/:id    |
 
 ### GET all
 
