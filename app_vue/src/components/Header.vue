@@ -1,15 +1,12 @@
 <template>
     <div class="header">
-        <h1>{{ title }}</h1>
+        <h1> Cvećara Božur </h1>
     </div>
 </template>
   
 <script>
 export default {
-    name: 'Header',
-    props: {
-        title: String
-    }
+    name: 'Header'
 }
 </script>
   

@@ -7,18 +7,24 @@
             <form @submit.prevent="submitOrder">
                 <label for="zakazano_vreme">Zakazano Vreme:</label>
                 <input type="datetime-local" id="zakazano_vreme" v-model="order.zakazano_vreme" required>
+                <span v-if="!isTimeValid" class="error-message"> Vreme mora biti minimum 24h od sada </span>
 
                 <label for="adresa">Adresa:</label>
                 <input type="text" id="adresa" v-model="order.adresa" required>
+                <span v-if="!isAdresaValid" class="error-message"> Adresa mora da sadrži slova i brojeve </span>
 
                 <label for="telefon">Telefon:</label>
                 <input type="tel" id="telefon" v-model="order.telefon" pattern="[0-9]+" required>
+                <span v-if="!isTelefonValid" class="error-message"> Telefon mora da sadrži samo brojeve ili format + kod
+                    države </span>
 
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="order.email" required>
+                <span v-if="!isEmailValid" class="error-message"> Email mora biti formata example@email.com </span>
 
                 <label for="ime_prezime">Ime i Prezime:</label>
                 <input type="text" id="ime_prezime" v-model="order.ime_prezime" required>
+                <span v-if="!isImePrezimeValid" class="error-message"> Ime i prezime mora da sadrži samo slova </span>
 
                 <label for="sadrzaj">Sadrzaj:</label>
 
@@ -76,9 +82,14 @@ export default {
                 sadrzaj: {}
             },
             products: [],
-            selectedProduct: null, 
-            selectedAmount: 1, 
-            submissionStatus: null
+            selectedProduct: null,
+            selectedAmount: 1,
+            submissionStatus: null,
+            isTimeValid: true,
+            isAdresaValid: true,
+            isTelefonValid: true,
+            isEmailValid: true,
+            isImePrezimeValid: true,
         };
     },
     async mounted() {
@@ -136,8 +147,47 @@ export default {
             }, 5000);
         },
 
+        validateOrder() {
+
+            const vreme = this.order.zakazano_vreme;
+            if (vreme == null) {
+                this.isTimeValid = false;
+            }
+
+            // Orer must be at least 24h from now
+            const selectedTime = new Date(vreme).getTime();
+            const currentTime = new Date().getTime();
+            const futureTime = currentTime + 24 * 60 * 60 * 1000; // Adding 24 hours
+
+            this.isTimeValid = selectedTime >= futureTime;
+
+            const adresaRegex = /^[a-zA-Z][a-zA-Z0-9\s,'-]*$/;
+            const telefonRegex = /^\+?[][0-9]*$/;
+            const emailRegex = /^[a-zA-Z0-9]*@[a-z].[a-z]$/;
+            const ime_prezimeRegex = /^[a-zA-Z][a-zA-Z\s]*$/;
+
+            this.isAdresaValid = adresaRegex.test(this.order.adresa);
+            this.isTelefonValid = telefonRegex.test(this.order.telefon);
+            this.isEmailValid = emailRegex.test(this.order.email);
+            this.isImePrezimeValid = ime_prezimeRegex.test(this.order.ime_prezime);
+
+            return (
+                this.isTimeValid &&
+                this.isAdresaValid &&
+                this.isTelefonValid &&
+                this.isEmailValid &&
+                this.isImePrezimeValid
+            );
+        },
+
         async submitOrder() {
             try {
+
+                if (!this.validateOrder()) {
+                    console.log("Incorrect order input")
+                    return;
+                }
+
                 const response = await fetch('http://localhost:9000/narudzbina', {
                     method: 'POST',
                     headers: {
@@ -235,5 +285,17 @@ select {
 
 button {
     margin-top: 10px;
+}
+
+.error-message {
+    display: block;
+    background-color: #554971;
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.9em;
+    opacity: 0.7;
+    margin-top: -10px;
+    margin-bottom: 10px;
 }
 </style>

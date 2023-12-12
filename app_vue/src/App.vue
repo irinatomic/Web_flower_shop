@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :title="headerTitle" />
+    <Header/>
     <nav>
       <router-link to="/"> Proizvodi </router-link> |
       <router-link to="/create-order"> Kreiraj narudžbinu </router-link>
@@ -16,11 +16,6 @@ export default {
   name: 'App',
   components: {
     Header
-  },
-  data() {
-    return {
-      headerTitle: 'Cvecara "Bozur"',
-    }
   }
 }
 </script>
@@ -30,7 +25,8 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
 
 /* Reset margin and padding for body and #app */
-body, #app {
+body,
+#app {
   margin: 0;
   padding: 0;
 }
@@ -42,8 +38,10 @@ body, #app {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background: linear-gradient(#554971, #8aC6d0); /* Gradient background */
-  min-height: 100vh; /* Ensures the gradient covers the entire viewport height */
+  background: linear-gradient(#554971, #8aC6d0);
+  /* Gradient background */
+  min-height: 100vh;
+  /* Ensures the gradient covers the entire viewport height */
 }
 
 nav {
@@ -58,5 +56,4 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #8aC6d0;
-}
-</style>
+}</style>

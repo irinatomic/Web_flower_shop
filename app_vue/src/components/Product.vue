@@ -11,7 +11,7 @@
             <button> Detalji </button>
         </router-link>
     </div>
-</template>D
+</template>
   
 <script>
 export default {
