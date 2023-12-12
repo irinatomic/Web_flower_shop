@@ -1,17 +1,24 @@
-const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 
-const fs = require('fs');
-const Joi = require('joi');
-const BP = require('body-parser');
 const app = express();
 
-// MIDDLEWARE (.use) -> public folder
-app.use(express.static(path.join(__dirname, 'static')));
+// User app
+app.use('/user', express.static(path.join(__dirname, 'static', 'user_app')));
+app.get('/user/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'user', 'index.html'));
+});
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'static', 'index.html'));
+// Admin app
+app.use('/admin', express.static(path.join(__dirname, 'static', 'admin_app')));
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'admin_app', `${req.params[0]}.html`));
+});
+
+// Default route - user app
+app.use(express.static(path.join(__dirname, 'static', 'user_app')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'user_app', 'index.html'));
 });
 
 app.listen(8000);
