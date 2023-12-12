@@ -7,8 +7,8 @@
             <p class="category">Kategorija: {{ product.kategorija.naziv }}</p>
             <p class="price">Cena: {{ product.cena }} RSD</p>
         </div>
-        <router-link :to="{ name: 'product-details', params: { id: product.id, productIds: productIds } }">
-            <button> Detalji </button>
+        <router-link :to="{ name: 'product-details', params: { id: product.id } }">
+            <button @click="setCurrentProduct(product.id)"> Detalji </button>
         </router-link>
     </div>
 </template>
@@ -18,10 +18,15 @@ export default {
     name: 'Product',
     props: {
         product: Object,
-        productIds: []
-    }
+    },
+    methods: {
+        setCurrentProduct(productId) {
+            this.$store.dispatch('setCurrentProductId', productId); // Dispatch action to set current product ID
+        },
+    },
 };
 </script>
+  
   
 <style scoped>
 .product-card {
@@ -49,5 +54,6 @@ export default {
     /* Limit number of lines */
     line-height: 1.4;
     /* Line height for multiline truncation */
-}</style>
+}
+</style>
   

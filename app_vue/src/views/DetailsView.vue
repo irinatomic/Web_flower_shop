@@ -10,29 +10,22 @@
 
 <script>
 import ProductDetails from '../components/ProductDetails.vue';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'DetailsView',
-  props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-    productIds: {
-      type: Array,
-      required: true,
-    },
-  },
   components: {
     ProductDetails,
   },
-  data() {
-    return {
-      localId: this.id,
-      currentIndex: this.productIds.indexOf(this.id),
-    };
-  },
   computed: {
+    ...mapState(['productIds', 'currentProductId']),      // From vuex store
+
+    localId() {
+      return this.currentProductId;
+    },
+    currentIndex() {
+      return this.productIds.indexOf(this.localId);
+    },
     isFirstItem() {
       return this.currentIndex === 0;
     },
@@ -41,16 +34,18 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['setCurrentProductId']),
+
     showPrevious() {
       if (this.currentIndex > 0) {
-        this.currentIndex -= 1;
-        this.localId = this.productIds[this.currentIndex];
+        const newId = this.productIds[this.currentIndex - 1];
+        this.setCurrentProductId(newId);
       }
     },
     showNext() {
       if (this.currentIndex < this.productIds.length - 1) {
-        this.currentIndex += 1;
-        this.localId = this.productIds[this.currentIndex];
+        const newId = this.productIds[this.currentIndex + 1];
+        this.setCurrentProductId(newId);
       }
     },
   },
