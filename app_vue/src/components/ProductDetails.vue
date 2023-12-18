@@ -1,19 +1,19 @@
 <template>
     <div class="product-details-container">
         <div class="product-details">
-            <div v-if="product && Object.keys(product).length !== 0">
-                <h2>{{ product.naziv }}</h2>
-                <p class="wrap-text"> {{ product.opis }}</p>
-                <p>Cena: {{ product.cena }} RSD</p>
-                <div v-if="product.cvetovi && product.cvetovi.length">
+            <div v-if="currentProduct && Object.keys(currentProduct).length !== 0">
+                <h2>{{ currentProduct.naziv }}</h2>
+                <p class="wrap-text"> {{ currentProduct.opis }}</p>
+                <p>Cena: {{ currentProduct.cena }} RSD</p>
+                <div v-if="currentProduct.cvetovi && currentProduct.cvetovi.length">
                     <h3>Cvetovi:</h3>
                     <ul class="flower-list">
-                        <li v-for="cvet in product.cvetovi" :key="cvet.id" class="flower-item">
+                        <li v-for="cvet in currentProduct.cvetovi" :key="cvet.id" class="flower-item">
                             {{ cvet.Cvet.naziv }}: {{ cvet.kolicina }}
                         </li>
                     </ul>
                 </div>
-                <p>Kategorija: {{ product.kategorija.naziv }}</p>
+                <p>Kategorija: {{ currentProduct.kategorija.naziv }}</p>
             </div>
             <div v-else>
                 Loading...
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
     name: 'ProductDetails',
     props: {
@@ -31,19 +33,19 @@ export default {
             required: true
         }
     },
-    data() {
-        return {
-            product: null
-        };
+
+    computed: {
+        ...mapState(['currentProduct'])
     },
+
+    methods: {
+        ...mapActions(['fetchProduct'])
+    },
+
     async mounted() {
-        try {
-            const res = await fetch(`http://localhost:9000/proizvod/${this.id}`);
-            this.product = await res.json();
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    }
+        await this.fetchProduct(this.id);
+    },
+
 };
 </script>
 

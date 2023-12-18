@@ -15,8 +15,7 @@
 
                 <label for="telefon">Telefon:</label>
                 <input type="tel" id="telefon" v-model="order.telefon" pattern="[0-9]+" required>
-                <span v-if="!isTelefonValid" class="error-message"> Telefon mora da sadrži samo brojeve ili format + kod
-                    države </span>
+                <span v-if="!isTelefonValid" class="error-message"> Telefon mora da sadrži samo brojeve </span>
 
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="order.email" required>
@@ -69,6 +68,8 @@
 </template>
   
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
     name: 'OrderForm',
     data() {
@@ -81,7 +82,6 @@ export default {
                 ime_prezime: '',
                 sadrzaj: {}
             },
-            products: [],
             selectedProduct: null,
             selectedAmount: 1,
             submissionStatus: null,
@@ -92,14 +92,13 @@ export default {
             isImePrezimeValid: true,
         };
     },
-    async mounted() {
-        try {
-            const res = await fetch('http://localhost:9000/proizvod');
-            this.products = await res.json();
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
+
+    // on load of the side all the products are fetched
+    // so no need to refetch them
+    computed: {
+        ...mapState(['products'])
     },
+    
     methods: {
         calculateTotalPrice() {
             let totalPrice = 0;
@@ -162,8 +161,8 @@ export default {
             this.isTimeValid = selectedTime >= futureTime;
 
             const adresaRegex = /^[a-zA-Z][a-zA-Z0-9\s,'-]*$/;
-            const telefonRegex = /^\+?[][0-9]*$/;
-            const emailRegex = /^[a-zA-Z0-9]*@[a-z].[a-z]$/;
+            const telefonRegex = /^[0-9]+$/;
+            const emailRegex = /^[^@]+@\w+\.\w+$/;
             const ime_prezimeRegex = /^[a-zA-Z][a-zA-Z\s]*$/;
 
             this.isAdresaValid = adresaRegex.test(this.order.adresa);
@@ -181,28 +180,15 @@ export default {
         },
 
         async submitOrder() {
-            try {
+            if (!this.validateOrder()) {
+                console.log("Incorrect order input")
+                return;
+            }
 
-                if (!this.validateOrder()) {
-                    console.log("Incorrect order input")
-                    return;
-                }
-
-                const response = await fetch('http://localhost:9000/narudzbina', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(this.order)
-                });
-
-                if (response.ok) {
-                    this.clearOrderForm();
-                } else {
-                    alert('Doslo je do greske prilikom slanja narudzbine!');
-                }
-            } catch (error) {
-                console.error('Error submitting order:', error);
+            await this.$store.dispatch('sendOrder', this.order);
+            const orderStatus = this.$store.state.orderStatus;
+            if(orderStatus === 'success') {
+                this.clearOrderForm();
             }
         }
     }
