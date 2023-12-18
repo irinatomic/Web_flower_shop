@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const Joi = require("joi");
 const { sequelize, Proizvod, Kategorija } = require("../models");
 
 // Middleware for parsing application/json
@@ -36,6 +37,11 @@ route.get("/:id", async (req, res) => {
 // POST
 route.post("/", async (req, res) => {
 
+    // Validate Kategorija data
+    if(!validateKategorija(req.body)) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
+
     try {
         const novi = await Kategorija.create(req.body);
         return res.json(novi);
@@ -47,6 +53,11 @@ route.post("/", async (req, res) => {
 
 // PUT
 route.put("/:id", async (req, res) => {
+
+    // Validate Kategorija data
+    if(!validateKategorija(req.body)) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
     
     try {
         const kat = await Kategorija.findByPk(req.params.id);
@@ -72,3 +83,10 @@ route.delete("/:id", async (req, res) => {
         res.status(500).json({ error: "Greska", data: err });
     }
 });
+
+function validateKategorija(kat) {
+    const schema = Joi.object({
+        naziv: Joi.string().required()
+    });
+    return schema.validate(kat);
+}

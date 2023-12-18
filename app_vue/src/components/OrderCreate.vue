@@ -289,7 +289,7 @@ button {
 
 .error-message {
     display: block;
-    background-color: #554971;
+    background-color: #eb1c6c;
     color: #ffffff;
     padding: 8px;
     border-radius: 0 0 8px 8px;

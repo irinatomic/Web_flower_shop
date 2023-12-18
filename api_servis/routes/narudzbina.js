@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const Joi = require("joi");
 const { sequelize, StavkaNarudzbine, Narudzbina, Proizvod } = require("../models");
 
 // Middleware for parsing application/json
@@ -15,13 +16,13 @@ route.get("/", async (req, res) => {
     try {
         const narudzbine = await Narudzbina.findAll({
             include: [
-              {
-                model: StavkaNarudzbine,
-                as: 'stavke',                        // this is the name of the association in models/Narduzbina.js     
-                include: [{ model: Proizvod }] 
-              }
+                {
+                    model: StavkaNarudzbine,
+                    as: 'stavke',                        // this is the name of the association in models/Narduzbina.js     
+                    include: [{ model: Proizvod }]
+                }
             ]
-          });
+        });
         return res.json(narudzbine);
     } catch (err) {
         console.log(err);
@@ -36,13 +37,13 @@ route.get("/:id", async (req, res) => {
         const narudzbina = await Narudzbina.findOne({
             where: { id: req.params.id },
             include: [
-              {
-                model: StavkaNarudzbine,
-                as: 'stavke',                        // this is the name of the association in models/Narduzbina.js     
-                include: [{ model: Proizvod }] 
-              }
+                {
+                    model: StavkaNarudzbine,
+                    as: 'stavke',                        // this is the name of the association in models/Narduzbina.js     
+                    include: [{ model: Proizvod }]
+                }
             ]
-          });
+        });
         return res.json(narudzbina);
     } catch (err) {
         console.log(err);
@@ -54,6 +55,11 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
 
     const narData = req.body;
+
+    // Validate Narudzbina data
+    if (!validateNarudzbina(narData)) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
 
     try {
 
@@ -89,10 +95,15 @@ route.post("/", async (req, res) => {
 
 // PUT
 route.put("/:id", async (req, res) => {
-    
+
     const narId = req.params.id;
     const narData = req.body;
-    
+
+    // Validate Narudzbina data
+    if (!validateNarudzbina(narData)) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
+
     try {
 
         let nar = await Narudzbina.findByPk(narId);
@@ -138,7 +149,7 @@ route.put("/:id", async (req, res) => {
                 jedinicna_cena: proizvodi.find(p => p.id == proizvod.id).cena * kolicina
             });
         }
-        
+
         return res.json(nar);
     } catch (err) {
         console.log(err);
@@ -176,3 +187,15 @@ route.put("/promeni-status/:id", async (req, res) => {
         res.status(500).json({ error: "Greska", data: err });
     }
 });
+
+function validateNarudzbina(narudzbina) {
+    const schema = Joi.object({
+        zakazano_vreme: Joi.date().iso().required(),
+        adresa: Joi.string().required(),
+        telefon: Joi.string().pattern(/^[0-9]{9,}$/).required(),
+        email: Joi.string().email().required(),
+        ime_prezime: Joi.string().required(),
+        sadrzaj: Joi.object().pattern(Joi.string(), Joi.string()).required()
+    });
+    return schema.validate(narudzbina);
+}

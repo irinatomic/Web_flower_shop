@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const Joi = require("joi");
 const { sequelize, Kategorija, Proizvod, Cvet, CvetUProizvodu } = require("../models");
 
 // Middleware for parsing application/json
@@ -52,6 +53,11 @@ route.post("/", async (req, res) => {
 
     const proizvodData = req.body;
 
+    // Validate Proizvod data
+    if(!validateProizvod(proizvodData)) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
+
     try {
 
         const proizvod = await Proizvod.findOrCreate({
@@ -89,6 +95,11 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     const proizvodId = req.params.id;
     const proizvodData = req.body;
+
+    // Validate Proizvod data
+    if(!validateProizvod(proizvodData)) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
 
     try {
         let proizvod = await Proizvod.findByPk(proizvodId);
@@ -167,3 +178,14 @@ route.put("/promeni-cenu/:id", async (req, res) => {
         res.status(500).json({ error: "Greska", data: err });
     }
 });
+
+function validateProizvod(proizvod) {
+    const schema = Joi.object({
+        naziv: Joi.string().min(3).required(),
+        opis: Joi.string().min(3).required(),
+        cena: Joi.number().required(),
+        kategorija: Joi.string().required(),
+        sadrzaj: Joi.object().pattern(Joi.string(), Joi.string()).required()
+    });
+    return schema.validate(proizvod);
+}
