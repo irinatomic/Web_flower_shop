@@ -32,6 +32,14 @@ module.exports = {
       ime_prezime: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      korisnik_id: { 
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Korisnik', 
+          key: 'id' 
+        },
       }
     });
   },
