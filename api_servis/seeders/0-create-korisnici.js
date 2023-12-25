@@ -1,25 +1,27 @@
 'use strict';
 
+const bcrypt = require('bcrypt');
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    
+
     try {
       const seedData = [
         {
-            username: 'admin',
-            password: 'admin',
-            admin: true,
-            email: 'admin@example.com'
+          username: 'admin',
+          password: bcrypt.hashSync("password", 10),
+          admin: true,
+          email: 'admin@example.com'
         },
         {
           username: 'username_one',
-          password: 'password',
+          password: bcrypt.hashSync("password", 10),
           admin: false,
           email: 'username_one@example.com',
         },
         {
           username: 'username_two',
-          password: 'password',
+          password: bcrypt.hashSync("admin", 10),
           admin: false,
           email: 'username_two@example.com',
         },

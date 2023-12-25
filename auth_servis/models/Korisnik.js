@@ -4,8 +4,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 
   class Korisnik extends Model {
-    static associate({ Narudzbina }) {
-      this.hasMany(Narudzbina, { foreignKey: 'korisnik_id', as: 'narudzbine' })
+    static associate({  }) {
+        // not including the association here
+        // because this is only an auth service
     }
   }
 
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: {
           msg: "Not an email address"
