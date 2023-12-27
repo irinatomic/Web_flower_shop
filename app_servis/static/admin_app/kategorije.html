@@ -13,100 +13,107 @@
 
 <body>
 
-<main class="container">
-  <div class="row">
-    <nav class="navbar navbar-expand-sm bg-light navbar-light">
-      <div class="container-fluid">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" href="index.html">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="ponuda.html">Ponuda</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="narudzbine.html">Narudzbine</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="kategorije.html">Kategorije</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="cvetovi.html">Cvetovi</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
-
-  <h1>Kategorije u ponudi</h1>
-  <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Dodaj kategoriju</button>
-
-  <!-- Table to display available categories -->
-  <table id="kategorije" class="table table-striped">
-    <thead>
-      <tr>
-        <th>Naziv</th>
-        <th>Izmena</th>
-      </tr>
-    </thead>
-    <tbody> <tr></tr> </tbody>
-  </table>
-
-  <!-- Modal code for adding a new category -->
-  <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addCategoryModalLabel">Dodaj novu kategoriju</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <main class="container">
+    <div class="row">
+      <nav class="navbar navbar-expand-sm bg-light navbar-light">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.html">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ponuda.html">Ponuda</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="narudzbine.html">Narudzbine</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="kategorije.html">Kategorije</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cvetovi.html">Cvetovi</a>
+            </li>
+          </ul>
         </div>
-        <div class="modal-body">
-          <form id="categoryForm">
-            <div class="form-group">
-              <label for="categoryName">Naziv kategorije:</label>
-              <input type="text" class="form-control" id="newCategoryInput" name="newCategoryInput">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeNewCategoryModal()">Zatvori</button>
-          <button type="button" class="btn btn-primary" onclick="addCategory(document.getElementById('newCategoryInput').value)">Dodaj</button>
+      </nav>
+    </div>
+
+    <h1>Kategorije u ponudi</h1>
+    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Dodaj
+      kategoriju</button>
+
+    <!-- Table to display available categories -->
+    <table id="kategorije" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Naziv</th>
+          <th>Izmena</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr></tr>
+      </tbody>
+    </table>
+
+    <!-- Modal code for adding a new category -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCategoryModalLabel">Dodaj novu kategoriju</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="categoryForm">
+              <div class="form-group">
+                <label for="categoryName">Naziv kategorije:</label>
+                <input type="text" class="form-control" id="newCategoryInput" name="newCategoryInput">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeNewCategoryModal()">Zatvori</button>
+            <button type="button" class="btn btn-primary"
+              onclick="addCategory(document.getElementById('newCategoryInput').value)">Dodaj</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal code for changing category name -->
-  <div class="modal fade" id="changeCategoryModal" tabindex="-1" role="dialog" aria-labelledby="changeCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="changeCategoryModalLabel">Izmeni naziv kategorije</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="categoryForm">
-            <div class="form-group">
-              <label for="categoryName">Naziv kategorije:</label>
-              <input type="text" class="form-control" id="changeCategoryInput" name="changeCategoryInput" value="AAAAA">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zatvori</button>
-          <button type="button" class="btn btn-primary" id="updateCategoryButton">Izmeni</button>
+    <!-- Modal code for changing category name -->
+    <div class="modal fade" id="changeCategoryModal" tabindex="-1" role="dialog"
+      aria-labelledby="changeCategoryModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="changeCategoryModalLabel">Izmeni naziv kategorije</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="categoryForm">
+              <div class="form-group">
+                <label for="categoryName">Naziv kategorije:</label>
+                <input type="text" class="form-control" id="changeCategoryInput" name="changeCategoryInput"
+                  value="AAAAA">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zatvori</button>
+            <button type="button" class="btn btn-primary" id="updateCategoryButton">Izmeni</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-</main>
+  </main>
 
-<script src="logic/kategorije.js"></script>
+  <script src="logic/kategorije.js"></script>
 </body>
 
 </html>
