@@ -2,9 +2,16 @@
 // Wait for the DOM to be fully loaded
 window.addEventListener("load", async function () {
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // get all categories from the api_servis
     try {
-        const response = await fetch('http://localhost:9000/kategorija');
+        const response = await fetch('http://localhost:9000/kategorija', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
         populateCategories(data);
     } catch (error) {
@@ -13,7 +20,11 @@ window.addEventListener("load", async function () {
 
     // get all flowers from the api_servis
     try {
-        const response = await fetch('http://localhost:9000/cvet');
+        const response = await fetch('http://localhost:9000/cvet', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
         populateFLowers(data);
     } catch (error) {
@@ -25,7 +36,11 @@ window.addEventListener("load", async function () {
     const id = urlParams.get('id');
 
     try {
-        const response = await fetch(`http://localhost:9000/proizvod/${id}`);
+        const response = await fetch(`http://localhost:9000/proizvod/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
         fillOutData(data);
     } catch (error) {
@@ -36,6 +51,7 @@ window.addEventListener("load", async function () {
     const dodajCvetBtn = document.getElementById('dodaj-cvet');
     const brojKomadaInput = document.getElementById('broj-komada');
     const sacuvajBtn = document.getElementById('sacuvaj-btn');
+    const logoutButton = document.getElementById('logout-btn');
 
     // Add an event listener for the input element to reset classes on keypress
     nazivInput.addEventListener("keypress", function () {
@@ -68,6 +84,12 @@ window.addEventListener("load", async function () {
         }
 
         dodajCvet(id, amount);
+    });
+
+    // Logout event listener
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
     });
 
 })
@@ -109,7 +131,7 @@ function fillOutData(responseData) {
     cenaInput.value = responseData.cena;
 
     // Kategorija
-    for(const option of kategorijaSelect.children) {
+    for (const option of kategorijaSelect.children) {
         if (option.value == responseData.kategorija_id) {
             option.selected = true;
             break;
@@ -200,7 +222,7 @@ async function modifyProduct() {
         var tempElement = document.createElement('div');
         tempElement.innerHTML = izabrano.children[i].innerHTML;
         var content = tempElement.textContent.replace(/\s*X\s*$/, '');
-        var amount =  content.split(" x ")[1];
+        var amount = content.split(" x ")[1];
         sadrzaj[id] = amount;
     }
 
@@ -208,11 +230,17 @@ async function modifyProduct() {
     const urlParams = new URLSearchParams(window.location.search);
     const idParam = urlParams.get('id');
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // Send to DB
     const url = `http://localhost:9000/proizvod/${idParam}`;
     const response = await fetch(url, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(noviProizvod),
     });
 

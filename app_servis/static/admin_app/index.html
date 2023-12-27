@@ -32,6 +32,9 @@
             <li class="nav-item">
               <a class="nav-link" href="cvetovi.html">Cvetovi</a>
             </li>
+            <li class="nav-item">
+              <button id="logout-btn" class="nav-link btn-link" onclick="logout()">Logout</button>
+            </li>
           </ul>
         </div>
       </nav>
@@ -39,6 +42,13 @@
     <h1>Dobrodosli na dashboard</h1>
     <p>Ovo je web stranica za cvećaru!</p>
   </main>
+
+  <script>
+    function logout() {
+      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = 'login.html';
+    }
+  </script>
 
 </body>
 

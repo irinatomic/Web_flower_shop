@@ -2,9 +2,16 @@
 // Wait for the DOM to be fully loaded
 window.addEventListener("load", async function () {
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // get all categories from the api_servis
     try {
-        const response = await fetch('http://localhost:9000/kategorija');
+        const response = await fetch('http://localhost:9000/kategorija', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
         populateCategories(data);
     } catch (error) {
@@ -13,7 +20,11 @@ window.addEventListener("load", async function () {
 
     // get all flowers from the api_servis
     try {
-        const response = await fetch('http://localhost:9000/cvet');
+        const response = await fetch('http://localhost:9000/cvet', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
         populateFLowers(data);
     } catch (error) {
@@ -24,6 +35,7 @@ window.addEventListener("load", async function () {
     const dodajCvetBtn = document.getElementById('dodaj-cvet-btn');
     const brojKomadaInput = document.getElementById('broj-komada-input');
     const unesiBtn = document.getElementById('unesi-btn');
+    const logoutButton = document.getElementById('logout-btn');
 
     // Add an event listener for the input element to reset classes on keypress
     nazivInput.addEventListener('keypress', function () {
@@ -56,6 +68,12 @@ window.addEventListener("load", async function () {
         }
 
         dodajCvet(id, amount);
+    });
+
+    // Logout event listener
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
     });
 
 })
@@ -162,17 +180,23 @@ async function addNewProduct(event) {
         var tempElement = document.createElement('div');
         tempElement.innerHTML = izabrano.children[i].innerHTML;
         var content = tempElement.textContent.replace(/\s*X\s*$/, '');
-        var amount =  content.split(" x ")[1];
+        var amount = content.split(" x ")[1];
         sadrzaj[id] = amount;
     }
 
     noviProizvod.sadrzaj = sadrzaj;
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // Send to DB
     const url = `http://localhost:9000/proizvod`;
     const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(noviProizvod),
     });
 

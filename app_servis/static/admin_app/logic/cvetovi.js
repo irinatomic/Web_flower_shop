@@ -1,14 +1,28 @@
 // Calls the function when the page is loaded
 window.addEventListener("load", async function () {
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     try {
-        const response = await fetch('http://localhost:9000/cvet');
+        const response = await fetch('http://localhost:9000/cvet', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
 
         populateTable(data);
     } catch (error) {
         console.error('Error:', error);
     }
+
+    // Logout event listener
+    const logoutButton = document.getElementById('logout-btn');
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
+    });
 });
 
 function populateTable(data) {
@@ -50,11 +64,14 @@ async function addFlower(naziv) {
         return;
     }
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // Add to DB
     const url = `http://localhost:9000/cvet`;
     const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ naziv: naziv })
     });
 
@@ -94,11 +111,14 @@ async function updateFlower(row, noviNaziv) {
         return;
     }
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // Update in DB
     const url = `http://localhost:9000/cvet/${row.id}`;
     const response = await fetch(url, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ naziv: noviNaziv })
     });
 
@@ -112,9 +132,15 @@ async function deleteFlower(row) {
 
     if(!confirm("Potvrdite brisanje")) return;
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // Delete from DB
     const url = `http://localhost:9000/cvet/${row.id}`;
-    const response = await fetch(url, { method: 'DELETE' });
+    const response = await fetch(url, { 
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` } 
+    });
 
     if(!response.ok) throw new Error(`Greska prilikom brisanja cveta: ${response.status}`);
 

@@ -1,14 +1,28 @@
 // Calls the function when the page is loaded
 window.addEventListener("load", async function () {
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     try {
-        const response = await fetch('http://localhost:9000/narudzbina');
+        const response = await fetch('http://localhost:9000/narudzbina', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
 
         populateTable(data);
     } catch (error) {
         console.error('Error:', error);
     }
+
+    // Logout event listener
+    const logoutButton = document.getElementById('logout-btn');
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
+    });
 });
 
 function populateTable(data) {

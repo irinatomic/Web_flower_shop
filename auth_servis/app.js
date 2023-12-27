@@ -36,23 +36,34 @@ app.post('/register', (req, res) => {
 });
 
 // LOGIN
-app.post('/login', (req, res) => {
-    Korisnik.findOne({ where: { username: req.body.username } })
-        .then(usr => {
-            if (bcrypt.compareSync(req.body.password, usr.password)) {
-                const obj = {
-                    userId: usr.id,
-                    user: usr.username
-                };
-                const token = jwt.sign(obj, process.env.ACCESS_TOKEN_SECRET);
-                res.json({ token: token });
-            } else {
-                res.status(400).json({ msg: "Invalid credentials" });
-            }
-        })
-        .catch(err => res.status(500).json(err));
-});
+app.post('/login', async (req, res) => {
+    try {
 
+        const usr = await Korisnik.findOne({ where: { username: req.body.username } });
+
+        if (!usr || !bcrypt.compareSync(req.body.password, usr.password)) {
+            return res.status(400).json({ msg: "Invalid credentials" });
+        }
+
+        let usr_role;
+        if (usr.admin) {
+            usr_role = 'admin';
+        } else {
+            usr_role = 'user';
+        }
+
+        const obj = {
+            userId: usr.id,
+            user: usr.username,
+            role: usr_role
+        };
+
+        const token = jwt.sign(obj, process.env.ACCESS_TOKEN_SECRET);
+        res.json({ token: token });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 app.listen({ port: 9001 }, async () => {
     await sequelize.authenticate();

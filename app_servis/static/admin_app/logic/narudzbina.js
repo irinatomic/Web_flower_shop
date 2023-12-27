@@ -5,8 +5,15 @@ window.addEventListener("load", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     try {
-        const response = await fetch(`http://localhost:9000/narudzbina/${id}`);
+        const response = await fetch(`http://localhost:9000/narudzbina/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
 
         fillOutData(data);
@@ -17,7 +24,14 @@ window.addEventListener("load", async function () {
     // Status event listener
     const statusSelect = document.getElementById('status');
     statusSelect.addEventListener('change', function () {
-        changeStatus(id, statusSelect.options[statusSelect.selectedIndex].text);
+        changeStatus(id, statusSelect.options[statusSelect.selectedIndex].text, token);
+    });
+
+    // Logout event listener
+    const logoutButton = document.getElementById('logout-btn');
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
     });
 });
 
@@ -60,14 +74,14 @@ function fillOutData(responseData) {
     });
 }
 
-async function changeStatus(id, newStatus) {
+async function changeStatus(id, newStatus, token) {
 
     // change the status in DB
     const url = `http://localhost:9000/narudzbina/promeni-status/${id}`;
 
     const response = await fetch(url, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ status_narudzbine: newStatus })
     });
 

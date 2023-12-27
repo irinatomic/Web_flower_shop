@@ -1,19 +1,32 @@
 // Calls the function when the page is loaded
 window.addEventListener("load", async function () {
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     try {
-        const response = await fetch('http://localhost:9000/proizvod');
+        const response = await fetch('http://localhost:9000/proizvod', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
 
         const ponudaTable = document.getElementById("ponuda-spisak");
-        populateTable(ponudaTable, data);
+        populateTable(ponudaTable, data, token);
     } catch (error) {
         console.error('Error:', error);
     }
 
+    // Logout event listener
+    const logoutButton = document.getElementById('logout-btn');
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
+    });
 });
 
-function populateTable(table, data) {
+function populateTable(table, data, token) {
     data.forEach(item => {
 
         const row = table.insertRow();
@@ -29,7 +42,7 @@ function populateTable(table, data) {
         opisCell.textContent = item.opis;
         cenaCell.textContent = item.cena;
 
-        opisCell.classList.add("opis-cell"); 
+        opisCell.classList.add("opis-cell");
 
         // PROMENA CENE BUTTON
         const promenaCeneButton = document.createElement("button");
@@ -42,13 +55,13 @@ function populateTable(table, data) {
                 const url = `http://localhost:9000/proizvod/promeni-cenu/${item.id}`;
                 const response = await fetch(url, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ cena: novaCena })
                 });
 
                 if (!response.ok) {
                     throw new Error(`Greska prilikom promene cene: ${response.status}`);
-                } 
+                }
                 const responseData = await response.json();
                 cenaCell.textContent = responseData.cena;
             }
@@ -60,10 +73,11 @@ function populateTable(table, data) {
         obrisiButton.textContent = "Obrisi";
 
         obrisiButton.onclick = async function () {
-            if( !confirm("Potvrdite brisanje") ) return;
-            
+            if (!confirm("Potvrdite brisanje")) return;
+
             const url = `http://localhost:9000/proizvod/${item.id}`;
             const response = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${token}` },
                 method: 'DELETE',
                 body: JSON.stringify({ id: item.id })
             });

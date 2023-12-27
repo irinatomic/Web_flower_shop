@@ -9,7 +9,7 @@ module.exports = {
       const seedData = [
         {
           username: 'admin',
-          password: bcrypt.hashSync("password", 10),
+          password: bcrypt.hashSync("admin", 10),
           admin: true,
           email: 'admin@example.com'
         },
@@ -21,7 +21,7 @@ module.exports = {
         },
         {
           username: 'username_two',
-          password: bcrypt.hashSync("admin", 10),
+          password: bcrypt.hashSync("password", 10),
           admin: false,
           email: 'username_two@example.com',
         },

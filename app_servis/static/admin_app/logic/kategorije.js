@@ -1,14 +1,28 @@
 // Calls the function when the page is loaded
 window.addEventListener("load", async function () {
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     try {
-        const response = await fetch('http://localhost:9000/kategorija');
+        const response = await fetch('http://localhost:9000/kategorija', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
 
         populateTable(data);
     } catch (error) {
         console.error('Error:', error);
     }
+
+    // Logout event listener
+    const logoutButton = document.getElementById('logout-btn');
+    logoutButton.addEventListener('click', function () {
+        document.cookie = `token=;SameSite=Lax`;
+        window.location.href = 'login.html';
+    });
 });
 
 function populateTable(data) {
@@ -45,16 +59,19 @@ function addRowToTable(item) {
 async function addCategory(naziv) {
 
     // Validate input
-    if (!(naziv.length > 2 && /^[A-Za-z\s]+$/.test(naziv))){
+    if (!(naziv.length > 2 && /^[A-Za-z\s]+$/.test(naziv))) {
         alert("Naziv kategorije mora sadržavati barem 3 slova i smeti sadržavati samo slova i razmake.");
         return;
     }
+
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
 
     // Add to DB
     const url = `http://localhost:9000/kategorija`;
     const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ naziv: naziv })
     });
 
@@ -82,7 +99,7 @@ async function openUpdateCategoryModal(row) {
     $('#changeCategoryModal').modal('show');
 
     // Add a click event to update the category name
-    updateCategoryButton.addEventListener("click", function () { 
+    updateCategoryButton.addEventListener("click", function () {
         updateCategory(row, categoryNameInput.value);
         closeNewCategoryModal();
     });
@@ -92,19 +109,22 @@ async function openUpdateCategoryModal(row) {
 async function updateCategory(row, noviNaziv) {
 
     // Validate input
-    if (!(noviNaziv.length > 2 && /^[A-Za-z\s]+$/.test(noviNaziv))){
+    if (!(noviNaziv.length > 2 && /^[A-Za-z\s]+$/.test(noviNaziv))) {
         alert("Naziv kategorije mora sadržavati barem 3 slova i smeti sadržavati samo slova i razmake.");
         return;
     }
+
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
 
     // Update DB
     const url = `http://localhost:9000/kategorija/${row.id}`;
     const response = await fetch(url, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ naziv: noviNaziv })
     });
-   
+
     if (!response.ok) throw new Error(`Greska prilikom izmene kategorije: ${response.status}`);
 
     // Update table
@@ -117,16 +137,22 @@ async function deleteCategory(row) {
 
     if (!confirm("Potvrdite brisnje")) return;
 
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     // Delete from DB
     const url = `http://localhost:9000/kategorija/${row.id}`;
-    const response = await fetch(url, { method: 'DELETE' });
+    const response = await fetch(url, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
     if (!response.ok) throw new Error(`Greska prilikom brisanja kategorije: ${response.status}`);
 
     // Delete from table
     row.remove();
 }
-    
+
 function closeNewCategoryModal() {
     var categoryNameInput = document.getElementById("newCategoryInput");
     categoryNameInput.value = '';
