@@ -1,23 +1,42 @@
 <template>
   <div id="app">
-    <Header/>
+    <Header />
     <nav>
-      <router-link to="/"> Proizvodi </router-link> |
-      <router-link to="/create-order"> Kreiraj narudžbinu </router-link>
+      <router-link to="/">Proizvodi</router-link> |
+      <router-link v-if="token" to="/create-order">Kreiraj narudžbinu</router-link> 
+      <router-link v-if="!token" to="/login">Prijava</router-link> | 
+      <router-link v-if="!token" to="/register">Registracija</router-link> 
+      <a v-if="token" href="#" @click="logout">Odjava</a>
     </nav>
     <router-view />
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import Header from './components/Header.vue';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    Header
-  }
-}
+    Header,
+  },
+  computed: {
+    ...mapState(['token']),
+  },
+  methods: {
+    ...mapMutations(['REMOVE_TOKEN', 'SET_TOKEN']), 
+    logout() {
+      console.log("ola");
+      this.REMOVE_TOKEN();
+    },
+  },
+  mounted() {
+    if (localStorage.token) {
+      this.SET_TOKEN(localStorage.token); 
+    }
+  },
+};
 </script>
 
 <style>
@@ -56,4 +75,5 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #8aC6d0;
-}</style>
+}
+</style>

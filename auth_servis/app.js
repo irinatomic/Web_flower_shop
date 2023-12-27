@@ -30,7 +30,6 @@ app.post('/register', (req, res) => {
             user: rows.username
         };
         const token = jwt.sign(usr, process.env.ACCESS_TOKEN_SECRET);
-        //console.log(token);
         res.json({ token: token });
     }).catch(err => res.status(500).json(err));
 });

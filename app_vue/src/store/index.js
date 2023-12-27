@@ -10,6 +10,7 @@ export default new Vuex.Store({
         currentProduct: {},                    // being viewed info
         currentProductId: null,                // being viewed id
         orderStatus: null,                     // order status - success or error
+        token: '',                             // user token
     },
 
     mutations: {
@@ -25,6 +26,14 @@ export default new Vuex.Store({
         },
         SET_ORDER_STATUS(state, status) {
             state.orderStatus = status;
+        },
+        SET_TOKEN(state, token) {
+            state.token = token;
+            localStorage.token = token;
+        },
+        REMOVE_TOKEN(state) {
+            state.token = '';
+            localStorage.token = '';
         }
     },
 
@@ -70,6 +79,32 @@ export default new Vuex.Store({
 
         setCurrentProductId({ commit }, productId) {
             commit('SET_CURRENT_PRODUCT_ID', productId);
+        },
+
+        async register({ commit }, obj) {
+            console.log(JSON.stringify(obj));
+            const response = await fetch('http://127.0.0.1:9001/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(obj)
+            });
+
+            const json = await response.json();
+            commit('SET_TOKEN', json.token);
+        },
+
+        async login({ commit }, obj) {
+            const response = await fetch('http://127.0.0.1:9001/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(obj)
+            })
+
+            const json = await response.json();
+            if(json.token) 
+                commit('SET_TOKEN', json.token);
+            else 
+                alert('Login failed');
         }
     },
 
