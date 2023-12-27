@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const Joi = require("joi");
+const { authAdminToken, authUserToken } = require('./middleware'); 
 const { sequelize, StavkaNarudzbine, Narudzbina, Proizvod } = require("../models");
 
 // Middleware for parsing application/json
@@ -11,7 +12,7 @@ route.use(express.urlencoded({ extended: true }));
 module.exports = route;
 
 // GET 
-route.get("/", async (req, res) => {
+route.get("/", authAdminToken, async (req, res) => {
 
     try {
         const narudzbine = await Narudzbina.findAll({
@@ -31,7 +32,7 @@ route.get("/", async (req, res) => {
 });
 
 // GET by id
-route.get("/:id", async (req, res) => {
+route.get("/:id", authAdminToken, async (req, res) => {
 
     try {
         const narudzbina = await Narudzbina.findOne({
@@ -52,7 +53,7 @@ route.get("/:id", async (req, res) => {
 });
 
 // POST
-route.post("/", async (req, res) => {
+route.post("/", authUserToken, async (req, res) => {
 
     const narData = req.body;
 
@@ -94,7 +95,7 @@ route.post("/", async (req, res) => {
 });
 
 // PUT
-route.put("/:id", async (req, res) => {
+route.put("/:id", authUserToken, async (req, res) => {
 
     const narId = req.params.id;
     const narData = req.body;
@@ -158,7 +159,7 @@ route.put("/:id", async (req, res) => {
 });
 
 // DELETE
-route.delete("/:id", async (req, res) => {
+route.delete("/:id", authAdminToken, async (req, res) => {
 
     try {
         const nar = await Narudzbina.findByPk(req.params.id);
@@ -174,7 +175,7 @@ route.delete("/:id", async (req, res) => {
 });
 
 // PUT change status
-route.put("/promeni-status/:id", async (req, res) => {
+route.put("/promeni-status/:id", authAdminToken, async (req, res) => {
 
     try {
         const nar = await Narudzbina.findByPk(req.params.id);

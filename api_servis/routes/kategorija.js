@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const Joi = require("joi");
+const { authAdminToken } = require('./middleware'); 
 const { sequelize, Proizvod, Kategorija } = require("../models");
 
 // Middleware for parsing application/json
@@ -35,7 +36,7 @@ route.get("/:id", async (req, res) => {
 });
 
 // POST
-route.post("/", async (req, res) => {
+route.post("/", authAdminToken, async (req, res) => {
 
     // Validate Kategorija data
     if(!validateKategorija(req.body)) {
@@ -52,7 +53,7 @@ route.post("/", async (req, res) => {
 });
 
 // PUT
-route.put("/:id", async (req, res) => {
+route.put("/:id", authAdminToken, async (req, res) => {
 
     // Validate Kategorija data
     if(!validateKategorija(req.body)) {
@@ -72,7 +73,7 @@ route.put("/:id", async (req, res) => {
 
 
 // DELETE
-route.delete("/:id", async (req, res) => {
+route.delete("/:id", authAdminToken, async (req, res) => {
 
     try {
         const kat = await Kategorija.findByPk(req.params.id);

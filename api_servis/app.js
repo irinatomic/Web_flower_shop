@@ -1,6 +1,9 @@
+const { sequelize, Proizvod, Kategorija, CvetUProizvodu, Cvet, StavkaNarudzbine, Narudzbina } = require("./models");
+
 const express = require('express');
 const cors = require("cors")
-const { sequelize, Proizvod, Kategorija, CvetUProizvodu, Cvet, StavkaNarudzbine, Narudzbina } = require("./models");
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const app = express();
 const corsOptions = { origin: ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8080'] };

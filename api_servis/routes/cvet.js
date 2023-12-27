@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const Joi = require("joi");
+const { authAdminToken } = require('./middleware'); 
 const { sequelize, CvetUProizvodu, Cvet } = require("../models");
 
 // Middleware for parsing application/json
@@ -35,7 +36,7 @@ route.get("/:id", async (req, res) => {
 });
 
 // POST
-route.post("/", async (req, res) => {
+route.post("/", authAdminToken, async (req, res) => {
 
     // Validate Cvet data
     if (!validateCvet(req.body)) {
@@ -52,7 +53,7 @@ route.post("/", async (req, res) => {
 });
 
 // PUT
-route.put("/:id", async (req, res) => {
+route.put("/:id", authAdminToken, async (req, res) => {
 
     // Validate Cvet data
     if (!validateCvet(req.body)) {
@@ -71,7 +72,7 @@ route.put("/:id", async (req, res) => {
 });
 
 // DELETE
-route.delete("/:id", async (req, res) => {
+route.delete("/:id", authAdminToken, async (req, res) => {
 
     try {
         const cvet = await Cvet.findByPk(req.params.id);

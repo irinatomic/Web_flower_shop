@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const Joi = require("joi");
+const { authAdminToken } = require('./middleware'); 
 const { sequelize, Kategorija, Proizvod, Cvet, CvetUProizvodu } = require("../models");
 
 // Middleware for parsing application/json
@@ -49,7 +50,7 @@ route.get("/:id", async (req, res) => {
 });
 
 // POST
-route.post("/", async (req, res) => {
+route.post("/", authAdminToken, async (req, res) => {
 
     const proizvodData = req.body;
 
@@ -92,7 +93,7 @@ route.post("/", async (req, res) => {
     }
 });
 
-route.put("/:id", async (req, res) => {
+route.put("/:id", authAdminToken, async (req, res) => {
     const proizvodId = req.params.id;
     const proizvodData = req.body;
 
@@ -149,7 +150,7 @@ route.put("/:id", async (req, res) => {
 
 
 // DELETE
-route.delete("/:id", async (req, res) => {
+route.delete("/:id", authAdminToken, async (req, res) => {
 
     try {
         const proizvod = await Proizvod.findByPk(req.params.id);
@@ -165,7 +166,7 @@ route.delete("/:id", async (req, res) => {
 });
 
 
-route.put("/promeni-cenu/:id", async (req, res) => {
+route.put("/promeni-cenu/:id", authAdminToken, async (req, res) => {
 
     try {
         const proizvod = await Proizvod.findByPk(req.params.id);
