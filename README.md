@@ -1,16 +1,23 @@
-## Cvećara
+## Web app - flower shop
 
-Irina Tomic RN 72/2022
+This project was done as a project for a University subject "Script languages". The task was to create a web app that is something like a web shop. The idea was to create it for Serbian marketplace so the names are in Serbian. This is a flower shop with 2 sides - admin and a user side. Created admin and users can be seen in this [file](api_servis/seeders/0-create-korisnici.js).
 
-Grupa 205 (Igor Ciganovic)
+### Architecture
+1. auth_servis: this service is responsible for the authentication.
+2. api_servis: this service acts as a backend that communicates with the database. The documentation for the endpoints can be found in [docs](docs).
+3. app_servis: this is the frontend which serves both the user and admin app.
 
 ### Running the app
-First, deploy the database as seen in [Deploying the database](#deploying-the-database). <br>
-From the api_servis and app_servis folders run <br>
+First, start the MySQLDatabase and Apache Web Server on your computer (this can be done through XAMPP).
+
+Secondly, deploy the database as seen in [Deploying the database](#deploying-the-database). From the `api_servis`, `app_servis`, and `auth_servis` folders run:
 ```
 npm install
 node app
 ```
+
+The user app: [http://localhost:8000/user](http://localhost:8000/user)
+The admin app: [http://localhost:8000/admin](http://localhost:8000/admin)
 
 ### API endpoints
 API endpoints are defined in the: <br>
@@ -36,3 +43,13 @@ If you wish to delete the tables run <br>
 ```
 sequelize db:migrate:undo:all
 ```
+
+### How the apps look
+Admin app -> whole offer: <br>
+![app_admin_offer](docs/app_admin_offer.png) <br>
+
+User app -> whole offer: <br>
+![app_user_offer](docs/app_user_offer.png) <br>
+
+User app -> order creation: <br>
+![app_user_order](docs/app_user_order_creation.png) <br>
