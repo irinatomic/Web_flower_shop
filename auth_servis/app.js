@@ -30,7 +30,7 @@ app.post('/register', (req, res) => {
             user: rows.username
         };
         const token = jwt.sign(usr, process.env.ACCESS_TOKEN_SECRET);
-        res.json({ token: token });
+        res.json({ token: token, id: rows.id });
     }).catch(err => res.status(500).json(err));
 });
 
@@ -58,7 +58,7 @@ app.post('/login', async (req, res) => {
         };
 
         const token = jwt.sign(obj, process.env.ACCESS_TOKEN_SECRET);
-        res.json({ token: token });
+        res.json({ token: token, id: usr.id });
     } catch (err) {
         res.status(500).json(err);
     }

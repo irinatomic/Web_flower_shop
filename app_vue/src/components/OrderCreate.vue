@@ -80,6 +80,7 @@ export default {
                 telefon: '',
                 email: '',
                 ime_prezime: '',
+                korisnik_id: '',
                 sadrzaj: {}
             },
             selectedProduct: null,
@@ -185,6 +186,7 @@ export default {
                 return;
             }
 
+            this.order.korisnik_id = this.$store.state.korisnik_id;
             await this.$store.dispatch('sendOrder', this.order);
             const orderStatus = this.$store.state.orderStatus;
             if(orderStatus === 'success') {

@@ -1,7 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const Joi = require("joi");
-const { authAdminToken, authUserToken } = require('./middleware'); 
+const { authAdminToken, authUserToken, getUserIdFromToken } = require('./middleware'); 
 const { sequelize, StavkaNarudzbine, Narudzbina, Proizvod } = require("../models");
 
 // Middleware for parsing application/json
@@ -70,7 +70,8 @@ route.post("/", authUserToken, async (req, res) => {
             adresa: narData.adresa,
             telefon: narData.telefon,
             email: narData.email,
-            ime_prezime: narData.ime_prezime
+            ime_prezime: narData.ime_prezime,
+            korisnik_id: narData.korisnik_id
         });
 
         // Fetch existing Proizvod entries

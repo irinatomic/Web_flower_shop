@@ -29,6 +29,7 @@ export default {
     logout() {
       console.log("ola");
       this.REMOVE_TOKEN();
+      this.REMOVE_KORISNIK_ID();
     },
   },
   mounted() {

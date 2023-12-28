@@ -11,6 +11,7 @@ export default new Vuex.Store({
         currentProductId: null,                // being viewed id
         orderStatus: null,                     // order status - success or error
         token: '',                             // user token
+        korisnik_id: null                     // user id
     },
 
     mutations: {
@@ -34,13 +35,26 @@ export default new Vuex.Store({
         REMOVE_TOKEN(state) {
             state.token = '';
             localStorage.token = '';
+        },
+        SET_KORISNIK_ID(state, id) {
+            state.korisnik_id = id;
+        },
+        REMOVE_KORISNIK_ID(state) {
+            state.korisnik_id = null;
         }
     },
 
     actions: {
         async fetchProducts({ commit }) {
             try {
-                const res = await fetch('http://localhost:9000/proizvod');
+                const res = await fetch('http://localhost:9000/proizvod', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.token}`,
+                    },
+                });
+
                 const products = await res.json();
                 commit('SET_PRODUCTS', products);
             } catch (error) {
@@ -50,7 +64,13 @@ export default new Vuex.Store({
 
         async fetchProduct({ commit }, productId) {
             try {
-                const res = await fetch(`http://localhost:9000/proizvod/${productId}`);
+                const res = await fetch(`http://localhost:9000/proizvod/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.token}`,
+                    },
+                });
                 const product = await res.json();
                 commit('SET_CURRENT_PRODUCT', product);
             } catch (error) {
@@ -59,14 +79,18 @@ export default new Vuex.Store({
         },
 
         async sendOrder({ commit }, order) {
+
             try {
                 const response = await fetch('http://localhost:9000/narudzbina', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.token}`,
                     },
                     body: JSON.stringify(order)
                 });
+
+                console.log(response)
 
                 // set order status
                 if (response.ok) commit('SET_ORDER_STATUS', 'success');
@@ -91,6 +115,7 @@ export default new Vuex.Store({
 
             const json = await response.json();
             commit('SET_TOKEN', json.token);
+            commit('SET_KORISNIK_ID', json.id);
         },
 
         async login({ commit }, obj) {
@@ -101,9 +126,11 @@ export default new Vuex.Store({
             })
 
             const json = await response.json();
-            if(json.token) 
+            if (json.token){
                 commit('SET_TOKEN', json.token);
-            else 
+                commit('SET_KORISNIK_ID', json.id);
+            }
+            else
                 alert('Login failed');
         }
     },

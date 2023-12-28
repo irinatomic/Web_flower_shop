@@ -8,7 +8,7 @@ function authAdminToken(req, res, next) {
     if (token == null) return res.status(401).json({ msg: 'Unauthorized' });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-        if (err || !payload || payload.role !== 'admin') {
+        if (err || !payload || payload.role != 'admin') {
             return res.status(403).json({ msg: 'Forbidden' });
         }
 
@@ -24,7 +24,7 @@ function authUserToken(req, res, next) {
     if (token == null) return res.status(401).json({ msg: 'Unauthorized' });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-        if (err || !payload || payload.role !== 'user') {
+        if (err || !payload || payload.role != 'user') {
             return res.status(403).json({ msg: 'Forbidden' });
         }
 
@@ -35,5 +35,5 @@ function authUserToken(req, res, next) {
 
 module.exports = {
     authAdminToken,
-    authUserToken
+    authUserToken,
 };
