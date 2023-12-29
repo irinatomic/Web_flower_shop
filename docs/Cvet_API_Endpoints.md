@@ -16,6 +16,7 @@ Listed are the API endpoints used to interact with the Cvet table in the databas
 |---------|-------------------------------------------------------------|
 | Returns | list: A list of all the data retrieved from the API.        |
 | Raises  | APIError:  If there is an error while making the API call.  |
+| Auth    | None                                                        |
 
 ### GET by id
 
@@ -23,6 +24,7 @@ Listed are the API endpoints used to interact with the Cvet table in the databas
 |---------|--------------------------------------------------------------|
 | Returns | object: The data retrieved from the API in JSON format.      |
 | Raises  | APIError: If there is an error while making the API call.    |
+| Auth    | None                                                         |
 
 Returns:
 ```
@@ -38,6 +40,7 @@ Returns:
 |---------|--------------------------------------------------------------|
 | Returns | object: The created object in JSON format.                   |
 | Raises  | APIError: If there is an error while making the API call.    |
+| Auth    | Admin                                                        |
 
 Request body:
 ```
@@ -60,6 +63,7 @@ Response:
 |---------|--------------------------------------------------------------|
 | Returns | object: The modified object in JSON format.                  |
 | Raises  | APIError: If there is an error while making the API call.    |
+| Auth    | Admin                                                        |
 
 Request body:
 ```
@@ -82,3 +86,4 @@ Response:
 |---------|--------------------------------------------------------------|
 | Returns | object: The id of the deleted cvet object.                   |
 | Raises  | APIError: If there is an error while making the API call.    |
+| Auth    | Admin                                                        |

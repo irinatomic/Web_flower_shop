@@ -16,6 +16,7 @@ Listed are the API endpoints used to interact with the Narudzbina table in the d
 |---------|-------------------------------------------------------------|
 | Returns | list: A list of all the data retrieved from the API.        |
 | Raises  | APIError:  If there is an error while making the API call.  |
+| Auth    | Admin                                                        |
 
 ### GET by id
 
@@ -23,6 +24,7 @@ Listed are the API endpoints used to interact with the Narudzbina table in the d
 |---------|--------------------------------------------------------------|
 | Returns | object: The data retrieved from the API in JSON format.      |
 | Raises  | APIError: If there is an error while making the API call.    |
+| Auth    | Admin                                                        |
 
 Returns:
 ```
@@ -73,6 +75,7 @@ Returns:
 |---------|--------------------------------------------------------------|
 | Returns | object: The created object in JSON format.                   |
 | Raises  | APIError: If there is an error while making the API call.    |
+| Auth    | User                                                         |
 
 Request body:
 ```
@@ -82,6 +85,7 @@ Request body:
   "telefon": "0641234567",
   "email": "ime_prezime",
   "ime_prezime": "ime_prezime",
+  "korisnik_id": "2",
   "sadrzaj": {
 			"1": "2",
 			"3": "1"
@@ -108,6 +112,7 @@ Response:
 |---------|--------------------------------------------------------------------|
 | Returns | object: The modified object in JSON format.                        |
 | Raises  | APIError: If there is an error while making the API call.          |
+| Auth    | User                                                               |
 
 Request body:
 ```
@@ -143,6 +148,7 @@ Response:
 |---------|----------------------------------------------------------------------------|
 | Returns | object: The modified object in JSON format.                                |
 | Raises  | APIError: If there is an error while making the API call.                  |
+| Auth    | Admin                                                                      |
 
 
 Request body:
@@ -171,3 +177,4 @@ Response:
 |---------|------------------------------------------------------------------|
 | Returns | object: The id of the deleted Narudzbina object.                 |
 | Raises  | APIError: If there is an error while making the API call.        |
+| Auth    | Admin                                                            |

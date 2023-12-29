@@ -31,7 +31,7 @@ API endpoints are defined in the: <br>
 
 ### Deploying the database
 Database schema can be seen in [database.sql](api_servis/database/database.sql) <br>
-![database_schema](docs/database_schema.png)
+![database_schema](docs/images/database_schema.png)
 
 From the api_servis run <br>
 ```
@@ -46,10 +46,10 @@ sequelize db:migrate:undo:all
 
 ### How the apps look
 Admin app -> whole offer: <br>
-![app_admin_offer](docs/app_admin_offer.png) <br>
+![app_admin_offer](docs/images/app_admin_offer.png) <br>
 
 User app -> whole offer: <br>
-![app_user_offer](docs/app_user_offer.png) <br>
+![app_user_offer](docs/images/app_user_offer.png) <br>
 
 User app -> order creation: <br>
-![app_user_order](docs/app_user_order_creation.png) <br>
+![app_user_order](docs/images/app_user_order_creation.png) <br>
